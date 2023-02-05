@@ -1,24 +1,26 @@
-import { FC } from "react"
-import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native"
+import { FC } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 
 interface Props {
-    placeholder : string
+  placeholder: string;
+  onChange: (event: React.SetStateAction<string>) => void;
 }
 
-
-const Input:FC<Props> = ({placeholder}) => {
-    return  <TextInput style={styles.input} placeholder={placeholder}></TextInput>
-}
+const Input: FC<Props> = ({ placeholder, onChange }) => {
+  return (
+    <TextInput style={styles.input} placeholder={placeholder} onChangeText={onChange}></TextInput>
+  );
+};
 
 const styles = StyleSheet.create({
-    input: {
-        height: 40,
-        borderWidth:1,
-        borderColor: 'black',
-        borderRadius: 20,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-      },
-})
+  input: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 20,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+});
 
 export default Input;
