@@ -1,76 +1,110 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import React, { FC, useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { FC } from 'react';
+import { Keyboard, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { userSignUp } from '../../action/registrationAction';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import LoadingScreen from '../../components/loadingScreen';
 import { RegistrationNavigation } from '../../constants/types';
-import { IsLoadingUser } from '../../selectors/registrationSelectors';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+
+const signUpSchema = yup.object({
+  email: yup.string().required().email(),
+  password: yup.string().required().min(4),
+  repeatPassword: yup
+    .string()
+    .required()
+    .oneOf([yup.ref('password')], 'Password is not the same'),
+});
+
+const initialValues = { email: '', password: '', repeatPassword: '' };
 
 interface Props {
-    navigation: NativeStackNavigationProp<RegistrationNavigation>;
-  }
+  navigation: NativeStackNavigationProp<RegistrationNavigation>;
+}
 
-const LogIn:FC<Props> = ({navigation}) => {
-  const dispatch = useDispatch()
+const SignUp: FC<Props> = ({ navigation }) => {
+  const dispatch = useDispatch();
 
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [repeatPassword, setRepeatPassword] = useState<string>('')
+  const hideKeyBoard = () => {
+    Keyboard.dismiss();
+  };
 
-    const goToLogIn = () => {
-        navigation.navigate('LogIn')
-      }
-      
-      const onChangeEmail = (event: React.SetStateAction<string>) => {
-        setEmail(event)
-      }
-      const onChangePassword = (event: React.SetStateAction<string>) => {
-        setPassword(event)
-      }
+  const goToLogIn = () => {
+    navigation.navigate('LogIn');
+  };
 
-      const onChangePasswordSecond = (event: React.SetStateAction<string>) => {
-        setRepeatPassword(event)
-      }
-
-      const signUp = () => {
-        if(password === repeatPassword){
-          dispatch(userSignUp({email, password}));
-        }
-      }
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid, dirty } =
+    useFormik<{ email: string; password: string; repeatPassword: string }>({
+      initialValues: initialValues,
+      validationSchema: signUpSchema,
+      onSubmit: values => {
+        const email = values.email;
+        const password = values.password;
+        dispatch(userSignUp({ email, password }));
+      },
+    });
 
   return (
+    <TouchableWithoutFeedback onPress={hideKeyBoard}>
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
       <View>
-        <Input placeholder={'email'} onChange={onChangeEmail}/>
-        <Input placeholder={'password'} onChange={onChangePassword}/>
-        <Input placeholder={'repeat password'} onChange={onChangePasswordSecond}/>
-        <Button title={'SignUp'} onPress={signUp}/>
-        <Button title={'LogIn'} onPress={goToLogIn} isSecondary/>
+        <Input
+          placeholder={'email'}
+          onChangeText={handleChange('email')}
+          value={values.email}
+          textContentType="emailAddress"
+          keyboardType="email-address"
+          onBlur={handleBlur('email')}
+          errors={errors.email}
+          isPassword={false}
+          touched={touched.email}
+          isRegistration={true}
+        />
+        <Input
+          placeholder={'password'}
+          onChangeText={handleChange('password')}
+          value={values.password}
+          textContentType="password"
+          onBlur={handleBlur('password')}
+          errors={errors.password}
+          isPassword={true}
+          touched={touched.password}
+          isRegistration={true}
+        />
+        <Input
+          placeholder={'repeat password'}
+          onChangeText={handleChange('repeatPassword')}
+          value={values.repeatPassword}
+          textContentType="password"
+          onBlur={handleBlur('repeatPassword')}
+          errors={errors.repeatPassword}
+          isPassword={true}
+          touched={touched.repeatPassword}
+          isRegistration={true}
+        />
+        <Button title={'SignUp'} onPress={handleSubmit} disabled={!(isValid && dirty)} />
+        <Button title={'LogIn'} onPress={goToLogIn} isSecondary />
       </View>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-  flex: 1,
-  marginHorizontal: 40,
-  justifyContent: 'center',
+    flex: 1,
+    marginHorizontal: 40,
+    justifyContent: 'center',
   },
-  title:{
+  title: {
     marginBottom: 50,
     textAlign: 'center',
     fontSize: 20,
   },
 });
 
-export default LogIn;
+export default SignUp;

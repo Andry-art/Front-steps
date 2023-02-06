@@ -5,15 +5,17 @@ interface Props {
   title: string;
   onPress: () => void;
   isSecondary?: boolean;
+  disabled?: boolean;
 }
 
-const Button: FC<Props> = ({ title, onPress, isSecondary }) => {
+const Button: FC<Props> = ({ title, onPress, isSecondary, disabled }) => {
   return (
     <TouchableOpacity
       style={isSecondary ? styles.buttonSecondary : styles.button}
       onPress={onPress}
+      disabled={disabled}
     >
-      <Text  style={isSecondary ? styles.textSecondary : styles.text}>{title}</Text>
+      <Text style={isSecondary ? styles.textSecondary : styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 };
