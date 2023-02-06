@@ -215,7 +215,7 @@ type TokensData = {
             password,
           }),
         });
-        console.log(response, 'aaa')
+
         if (response.status === 200) {
           
           const responseData = await response.json();

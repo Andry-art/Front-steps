@@ -15,7 +15,7 @@ export function* userSendLogIn(
       action.payload.email,
       action.payload.password,
     )) as Response;
-    console.log(response)
+    console.log(response, 'login')
 
     if (response) {
       yield put(userLogInSuccess());
@@ -39,7 +39,7 @@ export function* userSendSignUp(
       action.payload.email,
       action.payload.password,
     )) as Response;
-    console.log(response)
+    console.log(response, 'signUp')
 
     if (response) {
       yield put(userLogInSuccess());
