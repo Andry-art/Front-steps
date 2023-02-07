@@ -1,6 +1,6 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
+import { getUserDataAuth, logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
 import Config from 'react-native-config';
 import { Api } from '../constants/api';
 
@@ -14,11 +14,12 @@ export function* userSendLogIn(
       `https://steps-app.cyclic.app/auth/login`,
       action.payload.email,
       action.payload.password,
-    )) as Response;
+    )) as Response | any;
     console.log(response, 'login')
 
     if (response) {
       yield put(userLogInSuccess());
+      yield put(getUserDataAuth(response?.data));
     }
 
     if (!response) {

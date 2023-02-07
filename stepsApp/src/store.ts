@@ -2,12 +2,13 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import createSagaMiddleware from '@redux-saga/core';
 import registration from './reducer/registration';
 import { RootSaga } from './saga/rootSaga';
+import userData from './reducer/userData';
 
 const SagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
   registration,
-//   user,
+  userData
 //   discounts,
 });
 

@@ -34,3 +34,15 @@ export type textType =
   | 'newPassword'
   | 'oneTimeCode'
   | undefined;
+
+  export interface IUserData {
+    id: String;
+    balance: Number;
+    dailySteps: Number;
+    dailyActiveTime: Number;
+    dailyDestenation: Number;
+    dailyBalance: Number;
+    stepsHistory: Array<{ date: Date; steps: Number; tokens: Number }>;
+    isLoading: boolean;
+    error: string;
+  }
