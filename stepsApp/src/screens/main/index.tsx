@@ -1,38 +1,46 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import Button from '../../components/Button';
-import { dailyActiveTimeSelector, dailyBalanceSelector, dailyDistanceSelector, dailyStepsSelector } from '../../selectors/userDataSelector';
-
-
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import Pedometer from '@t2tx/react-native-universal-pedometer';
 
 const MainScreen = () => {
-  const dailySteps = useSelector(dailyStepsSelector);
-  const dailyActiviteTime = useSelector(dailyActiveTimeSelector);
-  const dailyDistance= useSelector(dailyDistanceSelector);
-  const dailyBalance = useSelector(dailyBalanceSelector);
+  const [steps, setSteps] = useState<number | undefined>(0);
+  const [distance, setDistance] = useState<number | undefined>(0);
+  const [tokens, setTokens] = useState<number | undefined>(0);
 
+  var d = new Date();
+  d.setHours(0, 0, 0, 0);
+
+  Pedometer.startPedometerUpdatesFromDate(d.getTime(), pedometerData => {
+    const distance = pedometerData?.distance ? pedometerData?.distance / 1000 : 0;
+    const tokensData = pedometerData?.numberOfSteps
+      ? Math.floor(pedometerData?.numberOfSteps / 100)
+      : tokens;
+    setDistance(distance);
+    setSteps(pedometerData?.numberOfSteps);
+    setTokens(tokensData);
+  });
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.infoContainer}>
         <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>Steps</Text>
-          <Text style={styles.info}>{dailySteps.toLocaleString()}</Text>
+          <Text style={styles.info}>{steps?.toLocaleString()}</Text>
         </View>
-        <View style={styles.infoItem}>
+        {/* <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>Active time</Text>
           <Text style={styles.info}>{dailyActiviteTime?.toLocaleString()}</Text>
-        </View>
+        </View> */}
         <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>KM</Text>
-          <Text style={styles.info}>{dailyDistance?.toLocaleString()}</Text>
+          <Text style={styles.info}>{distance?.toLocaleString()}</Text>
         </View>
       </View>
       <View style={styles.tokenContainer}>
         <Text style={styles.tokenTitle}>STEP TOKENS FOR TODAY</Text>
-        <Text style={styles.tokenInfo}>{dailyBalance?.toLocaleString()}</Text>
+        <Text style={styles.tokenInfo}>{tokens?.toLocaleString()}</Text>
       </View>
-      <Button title='start' onPress={()=>{}}></Button>
+      {/* <Button title='start' onPress={()=>{}}></Button> */}
     </SafeAreaView>
   );
 };
@@ -47,7 +55,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   infoItem: {
     alignItems: 'center',

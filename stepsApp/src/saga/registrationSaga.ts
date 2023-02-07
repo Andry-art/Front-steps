@@ -1,7 +1,6 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { getUserDataAuth, logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
-import Config from 'react-native-config';
+import { logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
 import { Api } from '../constants/api';
 
 export function* userSendLogIn(
@@ -19,7 +18,6 @@ export function* userSendLogIn(
 
     if (response) {
       yield put(userLogInSuccess());
-      yield put(getUserDataAuth(response?.data));
     }
 
     if (!response) {
