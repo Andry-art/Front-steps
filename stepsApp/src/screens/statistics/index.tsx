@@ -8,7 +8,7 @@ const Statistic = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
   
 
-  console.log(historySteps);
+  // console.log(historySteps);
   if (isLoading) {
     return <LoadingScreen/>;
   }

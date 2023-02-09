@@ -9,12 +9,12 @@ export function* getUserData(
   action: ReturnType<typeof getUserDataAction>,
 ): Generator {
   try {
-    console.log(action.payload, 'payload')
+    // console.log(action.payload, 'payload')
     const response = (yield call(
       Api.authGet.bind(Api),
       `https://steps-app.cyclic.app/data/userhistory?userId=${action.payload}`,
     )) as Response | any;
-console.log(response)
+// console.log(response)
     if (response) {
       yield put(getUserDataSucsses(response));
     }
