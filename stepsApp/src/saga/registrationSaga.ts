@@ -14,7 +14,7 @@ export function* userSendLogIn(
       action.payload.email,
       action.payload.password,
     )) as Response | any;
-    console.log(typeof response.user.id, 'login')
+    // console.log(typeof response.user.id, 'login')
 
     if (response) {
       yield AsyncStorage.setItem('user_id', response.user.id)
@@ -39,7 +39,7 @@ export function* userSendSignUp(
       action.payload.email,
       action.payload.password,
     )) as Response | any;
-    console.log(response, 'signUp')
+    // console.log(response, 'signUp')
 
     if (response) {
       yield AsyncStorage.setItem('user_id', response.user.id)

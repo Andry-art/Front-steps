@@ -37,7 +37,7 @@ export type textType =
 
   export interface IUserDataResponse {
     "userId": String,
-    "date": Date,
+    "date": String,
     "steps": Number,
     "tokens": Number,
     "_id": String,

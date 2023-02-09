@@ -4,20 +4,27 @@ import Pedometer from '@t2tx/react-native-universal-pedometer';
 import AsyncStorage from '@react-native-community/async-storage';
 import { getUserDataAction } from '../../action/userDataAction';
 import { useDispatch } from 'react-redux';
+import { io } from "socket.io-client";
+import Button from '../../components/Button';
+import moment from 'moment';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
   const [steps, setSteps] = useState<number | undefined>(0);
   const [distance, setDistance] = useState<number | undefined>(0);
   const [tokens, setTokens] = useState<number | undefined>(0);
+  const socket = io('http://localhost:3000/');
+
+const todayData = new Date()
 
   const getUserData = async () => {
     const userData = await AsyncStorage.getItem('user_id');
     if (userData) {
       dispatch(getUserDataAction(userData));
     }
-    // console.log(userData)
+
   };
+  socket.emit('message', {userId: '63e129e0eef10d9cd150305d', date: moment(todayData).format('DD.MM.YYYY'), steps, tokens});
 
   useEffect(() => {
     getUserData()
@@ -38,6 +45,7 @@ const MainScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+  
       <View style={styles.infoContainer}>
         <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>Steps</Text>
