@@ -22,7 +22,6 @@ if linkage != nil
 end
 
 target 'stepsApp' do
-  pod 'RNSensors', :path => '../node_modules/react-native-sensors'
   config = use_native_modules!
 
   # Flags change depending on the env values.

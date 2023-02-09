@@ -1,7 +1,9 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import React, { FC, memo, useEffect } from 'react';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutAction } from '../action/registrationAction';
+import { getUserDataAction } from '../action/userDataAction';
 import LoadingScreen from '../components/loadingScreen';
 import AuthStackNavigator from '../navigation/AuthStackNavigator';
 import TabNavigation from '../navigation/TabNavigation';
@@ -15,7 +17,6 @@ const Main: FC = memo(() => {
   const doCheckLogIn = async () => {
     try {
       const value = await EncryptedStorage.getItem('user_session');
-      console.log(value);
       console.log(value === undefined);
       if (!value) {
         dispatch(logOutAction());
@@ -26,6 +27,8 @@ const Main: FC = memo(() => {
       console.log('finely');
     }
   };
+
+ 
 
   useEffect(() => {
     doCheckLogIn();

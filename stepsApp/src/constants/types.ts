@@ -35,14 +35,17 @@ export type textType =
   | 'oneTimeCode'
   | undefined;
 
+  export interface IUserDataResponse {
+    "userId": String,
+    "date": Date,
+    "steps": Number,
+    "tokens": Number,
+    "_id": String,
+    "__v": Number
+  }
+
   export interface IUserData {
-    id: String;
-    balance: Number;
-    dailySteps: Number;
-    dailyActiveTime: Number;
-    dailyDestenation: Number;
-    dailyBalance: Number;
-    stepsHistory: Array<{ date: Date; steps: Number; tokens: Number }>;
+    data: Array<IUserDataResponse>;
     isLoading: boolean;
-    error: string;
+    error: String;
   }

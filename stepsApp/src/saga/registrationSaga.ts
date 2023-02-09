@@ -2,11 +2,11 @@ import {call, put, takeEvery} from 'redux-saga/effects';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
 import { Api } from '../constants/api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export function* userSendLogIn(
   action: ReturnType<typeof userLogIn>,
 ): Generator {
-    console.log(action)
   try {
     const response = (yield call(
       Api.auth.bind(Api),
@@ -14,9 +14,10 @@ export function* userSendLogIn(
       action.payload.email,
       action.payload.password,
     )) as Response | any;
-    console.log(response, 'login')
+    console.log(typeof response.user.id, 'login')
 
     if (response) {
+      yield AsyncStorage.setItem('user_id', response.user.id)
       yield put(userLogInSuccess());
     }
 
@@ -37,10 +38,11 @@ export function* userSendSignUp(
       'https://steps-app.cyclic.app/auth/signup',
       action.payload.email,
       action.payload.password,
-    )) as Response;
+    )) as Response | any;
     console.log(response, 'signUp')
 
     if (response) {
+      yield AsyncStorage.setItem('user_id', response.user.id)
       yield put(userLogInSuccess());
     }
     if (!response) {
@@ -57,7 +59,7 @@ export function* userLogOut(): Generator {
       Api.authPost.bind(Api),
       `https://steps-app.cyclic.app/auth/logout`,
     )) as Response;
-    console.log(response, 'logout')
+    yield AsyncStorage.removeItem('user_id')
     yield EncryptedStorage.clear();
     yield put(logOutActionSuccess());
   } catch (error) {

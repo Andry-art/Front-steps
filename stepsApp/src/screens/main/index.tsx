@@ -1,11 +1,27 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pedometer from '@t2tx/react-native-universal-pedometer';
+import AsyncStorage from '@react-native-community/async-storage';
+import { getUserDataAction } from '../../action/userDataAction';
+import { useDispatch } from 'react-redux';
 
 const MainScreen = () => {
+  const dispatch = useDispatch();
   const [steps, setSteps] = useState<number | undefined>(0);
   const [distance, setDistance] = useState<number | undefined>(0);
   const [tokens, setTokens] = useState<number | undefined>(0);
+
+  const getUserData = async () => {
+    const userData = await AsyncStorage.getItem('user_id');
+    if (userData) {
+      dispatch(getUserDataAction(userData));
+    }
+    // console.log(userData)
+  };
+
+  useEffect(() => {
+    getUserData()
+  }, []);
 
   var d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -80,3 +96,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 });
+function dispatch(arg0: { payload: string; type: string; }) {
+  throw new Error('Function not implemented.');
+}
+
