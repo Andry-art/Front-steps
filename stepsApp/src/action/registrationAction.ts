@@ -1,4 +1,5 @@
 import {createAction} from '@reduxjs/toolkit';
+import { IUserData } from '../constants/types';
 
 export const userLogIn =
   createAction<{email: string; password: string}>('USER_LOG_IN');

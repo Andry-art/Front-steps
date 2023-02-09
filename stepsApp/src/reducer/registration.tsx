@@ -13,7 +13,7 @@ const initialState: IRegistration = {
   error: '',
 };
 
-const userIsLogIn = createReducer<IRegistration>(initialState, builder => {
+const registration = createReducer<IRegistration>(initialState, builder => {
   builder
     .addCase('USER_LOG_IN', state => {
       state.isLoading = true;
@@ -22,7 +22,6 @@ const userIsLogIn = createReducer<IRegistration>(initialState, builder => {
     })
     .addCase('USER_SIGN_UP', state => ({...state, isLoading: true}))
     .addCase(userLogInSuccess, state => {
-        console.log('good done')
       state.isLogIn = true;
       state.isLoading = false;
       state.error = '';
@@ -51,4 +50,4 @@ const userIsLogIn = createReducer<IRegistration>(initialState, builder => {
     });
 });
 
-export default userIsLogIn;
+export default registration;

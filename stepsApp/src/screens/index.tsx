@@ -15,6 +15,7 @@ const Main: FC = memo(() => {
   const doCheckLogIn = async () => {
     try {
       const value = await EncryptedStorage.getItem('user_session');
+      console.log(value);
       console.log(value === undefined);
       if (!value) {
         dispatch(logOutAction());
