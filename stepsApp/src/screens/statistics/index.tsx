@@ -9,6 +9,7 @@ import { userHistoryLoadingSelector, userHistorySelector } from '../../selectors
 const Statistic = () => {
   const historySteps = useSelector(userHistorySelector);
   const isLoading = useSelector(userHistoryLoadingSelector);
+  const dispatch = useDispatch();
 
   const getUserData = async () => {
     const userData = await AsyncStorage.getItem('user_id');
@@ -16,24 +17,30 @@ const Statistic = () => {
       dispatch(getUserDataAction(userData));
     }
     useEffect(() => {
-      getUserData()
+      getUserData();
     }, []);
 
-  // console.log(historySteps);
-  if (isLoading) {
-    return <LoadingScreen/>;
-  }
-  return (
-    <SafeAreaView style={styles.container}>
-      {historySteps.map(it => {
-        return <View key={String(it._id)} style={{flexDirection: 'row', marginBottom: 20, justifyContent: 'space-evenly'}}>
-            <Text>{String(it.date)}</Text>
-            <Text>{String(it.steps)}</Text>
-            <Text>{String(it.tokens)}</Text>
-        </View>
-      })}
-    </SafeAreaView>
-  );
+    // console.log(historySteps);
+    if (isLoading) {
+      return <LoadingScreen />;
+    }
+    return (
+      <SafeAreaView style={styles.container}>
+        {historySteps.map(it => {
+          return (
+            <View
+              key={String(it._id)}
+              style={{ flexDirection: 'row', marginBottom: 20, justifyContent: 'space-evenly' }}
+            >
+              <Text>{String(it.date)}</Text>
+              <Text>{String(it.steps)}</Text>
+              <Text>{String(it.tokens)}</Text>
+            </View>
+          );
+        })}
+      </SafeAreaView>
+    );
+  };
 };
 
 export default Statistic;
@@ -45,7 +52,3 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
 });
-  function dispatch(arg0: any) {
-    throw new Error('Function not implemented.');
-  }
-
