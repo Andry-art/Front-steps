@@ -1,12 +1,23 @@
+import AsyncStorage from '@react-native-community/async-storage';
+import { useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { getUserDataAction } from '../../action/userDataAction';
 import LoadingScreen from '../../components/loadingScreen';
 import { userHistoryLoadingSelector, userHistorySelector } from '../../selectors/userDataSelector';
 
 const Statistic = () => {
   const historySteps = useSelector(userHistorySelector);
   const isLoading = useSelector(userHistoryLoadingSelector);
-  
+
+  const getUserData = async () => {
+    const userData = await AsyncStorage.getItem('user_id');
+    if (userData) {
+      dispatch(getUserDataAction(userData));
+    }
+    useEffect(() => {
+      getUserData()
+    }, []);
 
   // console.log(historySteps);
   if (isLoading) {
@@ -34,3 +45,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
 });
+  function dispatch(arg0: any) {
+    throw new Error('Function not implemented.');
+  }
+
