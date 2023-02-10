@@ -1,33 +1,39 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import Pedometer from '@t2tx/react-native-universal-pedometer';
-import AsyncStorage from '@react-native-community/async-storage';
-import { getUserDataAction } from '../../action/userDataAction';
 import { useDispatch } from 'react-redux';
-import { io } from "socket.io-client";
 import Button from '../../components/Button';
 import moment from 'moment';
+import BackgroundFetch from "react-native-background-fetch";
+import configureBackgroundFetch from '../../backgroundFetch';
+import AsyncStorage from '@react-native-community/async-storage';
+import { sendUserData } from '../../action/userDataAction';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
-  const [steps, setSteps] = useState<number | undefined>(0);
+  const [steps, setSteps] = useState<number | undefined>(385);
   const [distance, setDistance] = useState<number | undefined>(0);
-  const [tokens, setTokens] = useState<number | undefined>(0);
-  const socket = io('http://localhost:3000/');
+  const [tokens, setTokens] = useState<number | undefined>(3);
 
-const todayData = new Date()
+  const todayData = new Date()
 
-  const getUserData = async () => {
-    const userData = await AsyncStorage.getItem('user_id');
-    if (userData) {
-      dispatch(getUserDataAction(userData));
+  const sendData = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('user_id')
+      const stepData = {userId, date: moment(todayData).format('DD.MM.YYYY'), steps, tokens}
+      dispatch(sendUserData(stepData))
+      BackgroundFetch.finish();
+    } catch (error) {
+      console.log('[BackgroundFetch] Error:', error);
+  
+      // BackgroundFetch must signal completion by calling #finish.
+      BackgroundFetch.finish();
     }
+  }
 
-  };
-  socket.emit('message', {userId: '63e129e0eef10d9cd150305d', date: moment(todayData).format('DD.MM.YYYY'), steps, tokens});
 
   useEffect(() => {
-    getUserData()
+    configureBackgroundFetch(sendData);
   }, []);
 
   var d = new Date();
@@ -45,7 +51,6 @@ const todayData = new Date()
 
   return (
     <SafeAreaView style={styles.container}>
-  
       <View style={styles.infoContainer}>
         <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>Steps</Text>
@@ -104,7 +109,4 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 });
-function dispatch(arg0: { payload: string; type: string; }) {
-  throw new Error('Function not implemented.');
-}
 
