@@ -9,12 +9,12 @@ export function* getUserData(
   action: ReturnType<typeof getUserDataAction>,
 ): Generator {
   try {
-    console.log(action.payload, 'payload')
+
     const response = (yield call(
       Api.authGet.bind(Api),
       `https://steps-app.cyclic.app/data/userhistory?userId=${action.payload}`,
     )) as Response | any;
-// console.log(response)
+
     if (response) {
       yield put(getUserDataSucsses(response));
     }
@@ -35,12 +35,14 @@ export function* postUserData(
     console.log(action.payload, 'payload')
     const response = (yield call(
       Api.authPost.bind(Api),
-      `http://localhost:4000/data/newstepitem`,
+      `https://steps-app.cyclic.app/data/newstepitem`,
       action.payload
     )) as Response | any;
 
-    // if (!response) {
-    //   yield put(getUserDataFaild('Network isn`t working'));
+    if (!response) {
+      yield put(getUserDataFaild('Network isn`t working'));
+    }
+    // if (response) {
     // }
   } catch (error) {
     // yield put(getUserDataFaild((error as Error).message));

@@ -4,7 +4,6 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOutAction } from '../action/registrationAction';
 import { getUserDataAction } from '../action/userDataAction';
-import configureBackgroundFetch from '../backgroundFetch';
 import LoadingScreen from '../components/loadingScreen';
 import AuthStackNavigator from '../navigation/AuthStackNavigator';
 import TabNavigation from '../navigation/TabNavigation';

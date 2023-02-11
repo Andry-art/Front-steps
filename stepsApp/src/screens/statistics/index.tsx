@@ -17,6 +17,7 @@ const Statistic = () => {
       dispatch(getUserDataAction(userData));
     }
   }
+  
     useEffect(() => {
       getUserData();
     }, []);
@@ -41,7 +42,7 @@ const Statistic = () => {
         })}
       </SafeAreaView>
     );
-  };
+};
 
 
 const styles = StyleSheet.create({
