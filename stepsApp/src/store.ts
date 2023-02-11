@@ -3,6 +3,8 @@ import createSagaMiddleware from '@redux-saga/core';
 import registration from './reducer/registration';
 import { RootSaga } from './saga/rootSaga';
 import userData from './reducer/userData';
+import AsyncStorage from '@react-native-community/async-storage';
+import {persistStore, persistReducer} from 'redux-persist';
 
 const SagaMiddleware = createSagaMiddleware();
 
@@ -12,11 +14,19 @@ const rootReducer = combineReducers({
 //   discounts,
 });
 
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: [SagaMiddleware],
 });
 
+export const persister = persistStore(store);
 
 SagaMiddleware.run(RootSaga);
 
