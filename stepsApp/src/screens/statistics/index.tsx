@@ -16,11 +16,13 @@ const Statistic = () => {
     if (userData) {
       dispatch(getUserDataAction(userData));
     }
+  }
+  
     useEffect(() => {
       getUserData();
     }, []);
 
-    // console.log(historySteps);
+    console.log(historySteps);
     if (isLoading) {
       return <LoadingScreen />;
     }
@@ -40,10 +42,8 @@ const Statistic = () => {
         })}
       </SafeAreaView>
     );
-  };
 };
 
-export default Statistic;
 
 const styles = StyleSheet.create({
   container: {
@@ -52,3 +52,5 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
 });
+
+export default Statistic;

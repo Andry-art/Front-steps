@@ -28,8 +28,6 @@ const Main: FC = memo(() => {
     }
   };
 
- 
-
   useEffect(() => {
     doCheckLogIn();
   }, []);
