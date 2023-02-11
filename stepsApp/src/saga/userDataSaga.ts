@@ -3,7 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 // import { logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
 import { Api } from '../constants/api';
 import AsyncStorage from '@react-native-community/async-storage';
-import { getUserDataAction, getUserDataFaild, getUserDataSucsses, sendUserData } from '../action/userDataAction';
+import { getUserDataAction, getUserDataFaild, getUserDataSucsses, sendUserData, setDailyDataSucsses } from '../action/userDataAction';
 
 export function* getUserData(
   action: ReturnType<typeof getUserDataAction>,
@@ -32,7 +32,7 @@ export function* postUserData(
 ): Generator {
 
   try {
-    console.log(action.payload, 'payload')
+    console.log(action.payload, 'payloadDaily')
     const response = (yield call(
       Api.authPost.bind(Api),
       `https://steps-app.cyclic.app/data/newstepitem`,
@@ -48,8 +48,31 @@ export function* postUserData(
     // yield put(getUserDataFaild((error as Error).message));
   }
 }
+// export function* setDaulyUserData(
+//   action: ReturnType<typeof sendUserData>,
+// ): Generator {
+
+//   try {
+//     console.log(action.payload, 'payloaddaily')
+//     yield put(setDailyDataSucsses(action.payload))
+//     // const response = (yield call(
+//     //   Api.authPost.bind(Api),
+//     //   `https://steps-app.cyclic.app/data/newstepitem`,
+//     //   action.payload
+//     // )) as Response | any;
+
+//     // if (!response) {
+//     //   yield put(getUserDataFaild('Network isn`t working'));
+//     // }
+//     // // if (response) {
+//     // // }
+//   } catch (error) {
+//     // yield put(getUserDataFaild((error as Error).message));
+//   }
+// }
 
 export function* userDataSaga(): Generator {
   yield takeEvery('GET_USER_DATA', getUserData);
   yield takeEvery('POST_USER_DATA', postUserData);
+  // yield takeEvery('SET_DAILY_DATA', setDaulyUserData);
 }

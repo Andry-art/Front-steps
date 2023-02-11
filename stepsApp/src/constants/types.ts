@@ -44,8 +44,17 @@ export type textType =
     "__v": Number
   }
 
+  export interface IDailyData {
+    userId?: string | null, 
+    date?: string, 
+    steps?: number, 
+    tokens?: number,
+    distance?: number 
+  }
+
   export interface IUserData {
     data: Array<IUserDataResponse>;
+    dailyData: IDailyData,
     isLoading: boolean;
     error: String;
   }

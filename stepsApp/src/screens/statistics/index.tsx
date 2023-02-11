@@ -11,16 +11,16 @@ const Statistic = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
   const dispatch = useDispatch();
 
-  const getUserData = async () => {
-    const userData = await AsyncStorage.getItem('user_id');
-    if (userData) {
-      dispatch(getUserDataAction(userData));
-    }
-  }
+  // const getUserData = async () => {
+  //   const userData = await AsyncStorage.getItem('user_id');
+  //   if (userData) {
+  //     dispatch(getUserDataAction(userData));
+  //   }
+  // }
   
-    useEffect(() => {
-      getUserData();
-    }, []);
+    // useEffect(() => {
+    //   getUserData();
+    // }, []);
 
     console.log(historySteps);
     if (isLoading) {

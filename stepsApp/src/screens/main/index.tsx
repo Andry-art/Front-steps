@@ -1,12 +1,13 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import Pedometer from '@t2tx/react-native-universal-pedometer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
-import { getUserDataAction, sendUserData } from '../../action/userDataAction';
+import { getUserDataAction, refreshDailyState, sendUserData, setDailyData } from '../../action/userDataAction';
 import CommonInfo from './commonInfo';
+import { dailyDataSelector } from '../../selectors/userDataSelector';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ const MainScreen = () => {
   const [seconds, setSeconds] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   let intervalId: any = null;
+
+  const dailyData = useSelector(dailyDataSelector)
 
   useEffect(() => {
     if (isTimerRunning) {
@@ -37,36 +40,31 @@ const MainScreen = () => {
   d.setHours(0, 0, 0, 0);
 
   const onStartCount = async () => {
+    const userId = await AsyncStorage.getItem('user_id');
     if (!isStart) {
       setIsTimerRunning(true);
       setIsStart(true);
       const timeStart = new Date();
-      let timeEnd = new Date();
-      timeEnd.setHours(23, 59, 59);
       Pedometer.startPedometerUpdatesFromDate(timeStart.getTime(), pedometerData => {
         const distance = pedometerData?.distance ? pedometerData?.distance / 1000 : 0;
         const tokensData = pedometerData?.numberOfSteps
           ? Math.floor(pedometerData?.numberOfSteps / 100)
           : tokens;
+          const stepData = { userId, date: moment(todayData).format('DD.MM.YYYY'), steps: pedometerData?.numberOfSteps, tokens: tokensData , distance };
         if (pedometerData?.numberOfSteps) {
-          setDistance(distance);
-          setSteps(pedometerData?.numberOfSteps);
-          setTokens(tokensData);
+          dispatch(setDailyData(stepData))
         }
       });
     } else {
       setIsTimerRunning(false);
       Pedometer.stopPedometerUpdates();
       setIsStart(false);
-      const userId = await AsyncStorage.getItem('user_id');
       if (userId) {
-        const stepData = { userId, date: moment(todayData).format('DD.MM.YYYY'), steps, tokens };
+        const stepData = { userId, date: dailyData.date, steps: dailyData.steps, tokens: dailyData.tokens};
         dispatch(sendUserData(stepData));
         dispatch(getUserDataAction(userId));
       }
-      setDistance(0);
-      setSteps(0);
-      setTokens(0);
+      dispatch(refreshDailyState())
       setSeconds(0);
     }
   };
@@ -83,10 +81,15 @@ const MainScreen = () => {
           <Text style={styles.tokenTitle}>SP per walk</Text>
         </View>
       </View>
+      {/* <Button
+          title={'count'}
+          onPress={() => setSteps(state => state + 1)}
+          style={isStart ? styles.buttonColorStop : styles.buttonColorStart}
+        /> */}
       <View style={styles.buttomContainer}>
         <CommonInfo
-          steps={steps}
-          distance={distance}
+          steps={dailyData?.steps}
+          distance={dailyData?.distance}
           hours={hours}
           minutes={minutes}
           seconds={remainingSeconds}
