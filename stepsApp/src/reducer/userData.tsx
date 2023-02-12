@@ -3,7 +3,6 @@ import {
   getUserDataFaild,
   getUserDataSucsses,
   setDailyData,
-  setDailyDataSucsses,
 } from '../action/userDataAction';
 import { IDailyData, IUserData, IUserDataResponse } from '../constants/types';
 
