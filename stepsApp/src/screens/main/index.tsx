@@ -14,15 +14,14 @@ import {
 import CommonInfo from './commonInfo';
 import { dailyDataSelector } from '../../selectors/userDataSelector';
 import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
+import BackgroundTimer from 'react-native-background-timer';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
   const [isStart, setIsStart] = useState<boolean>(false);
   const [seconds, setSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState<any>(0);
-  // const [show, setShow] = useState<boolean>()
   const { isConnected } = useNetInfo();
-  // let intervalId: any = null;
 
   const dailyData = useSelector(dailyDataSelector);
 
@@ -37,12 +36,14 @@ const MainScreen = () => {
   };
 
   useEffect(() => {
+    BackgroundTimer.start();
     getStep();
   }, []);
 
   const catchDisconect = async () => {
-    if (isStart && isConnected === false) {
+    if(isConnected === false){
       Alert.alert('You lose your internet connection, but we kept you last steps');
+    }
       Pedometer.stopPedometerUpdates();
       const lastSteps = {
         userId: dailyData.userId,
@@ -56,15 +57,19 @@ const MainScreen = () => {
       clearInterval(intervalId);
       dispatch(refreshDailyState());
       return;
-    }
   };
 
   useEffect(() => {
+    if (isStart && isConnected === false) {
     catchDisconect();
+    }
+    if(dailyData.date){
+      if (moment(todayData).format('DD.MM.YYYY') !== dailyData.date) {
+        catchDisconect();
+        }
+    }
+  
   }, [isConnected]);
-
-  var d = new Date();
-  d.setHours(0, 0, 0, 0);
 
   const onStart = async () => {
     console.log('onStart');
@@ -109,6 +114,7 @@ const MainScreen = () => {
     dispatch(refreshDailyState());
     setSeconds(0);
     clearInterval(intervalId);
+    BackgroundTimer.stop();
     return;
   };
 
