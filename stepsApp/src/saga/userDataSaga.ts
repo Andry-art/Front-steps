@@ -1,9 +1,7 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
-import EncryptedStorage from 'react-native-encrypted-storage';
-// import { logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
 import { Api } from '../constants/api';
-import AsyncStorage from '@react-native-community/async-storage';
 import { getUserDataAction, getUserDataFaild, getUserDataSucsses, sendUserData } from '../action/userDataAction';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export function* getUserData(
   action: ReturnType<typeof getUserDataAction>,
@@ -32,7 +30,7 @@ export function* postUserData(
 ): Generator {
 
   try {
-    console.log(action.payload, 'payload')
+    console.log(action.payload, 'payloadDaily')
     const response = (yield call(
       Api.authPost.bind(Api),
       `https://steps-app.cyclic.app/data/newstepitem`,
@@ -42,8 +40,9 @@ export function* postUserData(
     if (!response) {
       yield put(getUserDataFaild('Network isn`t working'));
     }
-    // if (response) {
-    // }
+    if (response) {
+      yield AsyncStorage.removeItem('last_steps')
+    }
   } catch (error) {
     // yield put(getUserDataFaild((error as Error).message));
   }

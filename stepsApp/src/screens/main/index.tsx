@@ -1,105 +1,172 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import Pedometer from '@t2tx/react-native-universal-pedometer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
-import { getUserDataAction, sendUserData } from '../../action/userDataAction';
+import {
+  getUserDataAction,
+  refreshDailyState,
+  sendUserData,
+  setDailyData,
+} from '../../action/userDataAction';
 import CommonInfo from './commonInfo';
+import { dailyDataSelector } from '../../selectors/userDataSelector';
+import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
+import BackgroundTimer from 'react-native-background-timer';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
-  const [steps, setSteps] = useState<number>(0);
-  const [distance, setDistance] = useState<number>(0);
-  const [tokens, setTokens] = useState<number>(0);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [seconds, setSeconds] = useState(0);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  let intervalId: any = null;
+  const [intervalId, setIntervalId] = useState<any>(0);
+  const { isConnected } = useNetInfo();
 
-  useEffect(() => {
-    if (isTimerRunning) {
-      intervalId = setInterval(() => {
-        setSeconds(seconds => seconds + 1);
-      }, 1000);
-    }
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [isTimerRunning]);
+  const dailyData = useSelector(dailyDataSelector);
 
   const todayData = new Date();
 
-  var d = new Date();
-  d.setHours(0, 0, 0, 0);
-
-  const onStartCount = async () => {
-    if (!isStart) {
-      setIsTimerRunning(true);
-      setIsStart(true);
-      const timeStart = new Date();
-      let timeEnd = new Date();
-      timeEnd.setHours(23, 59, 59);
-      Pedometer.startPedometerUpdatesFromDate(timeStart.getTime(), pedometerData => {
-        const distance = pedometerData?.distance ? pedometerData?.distance / 1000 : 0;
-        const tokensData = pedometerData?.numberOfSteps
-          ? Math.floor(pedometerData?.numberOfSteps / 100)
-          : tokens;
-        if (pedometerData?.numberOfSteps) {
-          setDistance(distance);
-          setSteps(pedometerData?.numberOfSteps);
-          setTokens(tokensData);
-        }
-      });
-    } else {
-      setIsTimerRunning(false);
-      Pedometer.stopPedometerUpdates();
-      setIsStart(false);
-      const userId = await AsyncStorage.getItem('user_id');
-      if (userId) {
-        const stepData = { userId, date: moment(todayData).format('DD.MM.YYYY'), steps, tokens };
-        dispatch(sendUserData(stepData));
-        dispatch(getUserDataAction(userId));
-      }
-      setDistance(0);
-      setSteps(0);
-      setTokens(0);
-      setSeconds(0);
+  const getStep = async () => {
+    const lastSteps = await AsyncStorage.getItem('last_steps');
+    if(lastSteps){
+      const stepData = JSON.parse(lastSteps)
+      dispatch(sendUserData(stepData));
     }
   };
 
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
+  useEffect(() => {
+    BackgroundTimer.start();
+    getStep();
+  }, []);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.tokenContainer}>
-        <View style={styles.tokenCircle}>
-          <Text style={styles.tokenInfo}>{tokens?.toLocaleString()}</Text>
-          <Text style={styles.tokenTitle}>SP per walk</Text>
+  const catchDisconect = async () => {
+    if(isConnected === false){
+      Alert.alert('You lose your internet connection, but we kept you last steps');
+    }
+      Pedometer.stopPedometerUpdates();
+      const lastSteps = {
+        userId: dailyData.userId,
+        date: dailyData.date,
+        steps: dailyData.steps,
+        tokens: dailyData.tokens,
+      };
+      await AsyncStorage.setItem('last_steps', JSON.stringify(lastSteps));
+      setIsStart(false);
+      setSeconds(0);
+      clearInterval(intervalId);
+      dispatch(refreshDailyState());
+      return;
+  };
+
+  useEffect(() => {
+    if (isStart && isConnected === false) {
+    catchDisconect();
+    }
+    if(dailyData.date){
+      if (moment(todayData).format('DD.MM.YYYY') !== dailyData.date) {
+        catchDisconect();
+        }
+    }
+  
+  }, [isConnected]);
+
+  const onStart = async () => {
+    console.log('onStart');
+    const userId = await AsyncStorage.getItem('user_id');
+    const intervalId = setInterval(() => {
+      setSeconds(seconds => seconds + 1);
+    }, 1000);
+    setIntervalId(intervalId);
+    setIsStart(true);
+    const timeStart = new Date();
+    Pedometer.startPedometerUpdatesFromDate(timeStart.getTime(), pedometerData => {
+      const distance = pedometerData?.distance ? pedometerData?.distance / 1000 : 0;
+      const tokensData = pedometerData?.numberOfSteps
+        ? Math.floor(pedometerData?.numberOfSteps / 100)
+        : dailyData.tokens;
+      const stepData = {
+        userId,
+        date: moment(todayData).format('DD.MM.YYYY'),
+        steps: pedometerData?.numberOfSteps,
+        tokens: tokensData,
+        distance,
+      };
+      if (pedometerData?.numberOfSteps) {
+        dispatch(setDailyData(stepData));
+      }
+    });
+  };
+
+  const onEnd = () => {
+    Pedometer.stopPedometerUpdates();
+    setIsStart(false);
+    if (dailyData.userId) {
+      const stepData = {
+        userId: dailyData.userId,
+        date: dailyData.date,
+        steps: dailyData.steps,
+        tokens: dailyData.tokens,
+      };
+      dispatch(sendUserData(stepData));
+      dispatch(getUserDataAction(dailyData.userId));
+    }
+    dispatch(refreshDailyState());
+    setSeconds(0);
+    clearInterval(intervalId);
+    BackgroundTimer.stop();
+    return;
+  };
+
+  const onPressButton = async () => {
+    if (!isStart) {
+      if (isConnected) {
+        await onStart();
+      } else {
+        Alert.alert('Turn on internet before start');
+      }
+    } else {
+      if (isConnected) {
+        onEnd();
+      }
+    }
+  }
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.tokenContainer}>
+          <View style={styles.tokenCircle}>
+            <Text style={styles.tokenInfo}>{dailyData.tokens?.toLocaleString()}</Text>
+            <Text style={styles.tokenTitle}>SP per walk</Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.buttomContainer}>
-        <CommonInfo
-          steps={steps}
-          distance={distance}
-          hours={hours}
-          minutes={minutes}
-          seconds={remainingSeconds}
-        />
-        <Button
-          title={isStart ? 'stop' : 'start'}
-          onPress={onStartCount}
+        {/* <Button
+          title={'count'}
+          onPress={() => setSteps(state => state + 1)}
           style={isStart ? styles.buttonColorStop : styles.buttonColorStart}
-        />
-      </View>
-    </SafeAreaView>
-  );
-};
+        /> */}
+        <View style={styles.buttomContainer}>
+          <CommonInfo
+            steps={dailyData?.steps}
+            distance={dailyData?.distance}
+            hours={hours}
+            minutes={minutes}
+            seconds={remainingSeconds}
+          />
+          <Button
+            title={isStart ? 'stop' : 'start'}
+            onPress={onPressButton}
+            style={isStart ? styles.buttonColorStop : styles.buttonColorStart}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  };
+
 
 export default MainScreen;
 

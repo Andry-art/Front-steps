@@ -1,17 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { FC, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { number } from 'yup';
-import { getUserDataAction } from '../../action/userDataAction';
-import LoadingScreen from '../../components/loadingScreen';
-import { userHistoryLoadingSelector, userHistorySelector } from '../../selectors/userDataSelector';
 
 interface Props{
-    steps: number;
+    steps?: number;
     hours: number;
     minutes: number;
-    distance: number;
+    distance?: number;
     seconds: number;
 }
 

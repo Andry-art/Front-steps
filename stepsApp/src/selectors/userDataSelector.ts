@@ -13,3 +13,7 @@ export const userHistoryLoadingSelector = (state: RootState) => {
   export const userHistoryErrorSelector = (state: RootState) => {
     return state.userData.error;
   };
+
+  export const dailyDataSelector = (state: RootState) => {
+    return state.userData.dailyData;
+  };
