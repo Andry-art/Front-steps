@@ -4,13 +4,11 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 interface Props{
     steps?: number;
-    hours: number;
-    minutes: number;
+    time: string;
     distance?: number;
-    seconds: number;
 }
 
-const CommonInfo:FC<Props> = ({steps, hours, minutes, distance, seconds}) => {
+const CommonInfo:FC<Props> = ({steps, time, distance}) => {
  
 
     return (
@@ -21,7 +19,7 @@ const CommonInfo:FC<Props> = ({steps, hours, minutes, distance, seconds}) => {
         </View>
         <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>Time</Text>
-          <Text style={styles.info}>{hours} : {minutes} : {seconds}</Text>
+          <Text style={styles.info}>{time}</Text>
         </View>
         <View style={styles.infoItem}>
           <Text style={styles.infoTitle}>KM</Text>
