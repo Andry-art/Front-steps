@@ -21,14 +21,13 @@ const MainScreen = () => {
   const [time, setTime] = useState('0 : 0 : 0');
   const [intervalId, setIntervalId] = useState<any>(0);
   const { isConnected } = useNetInfo();
-
+  const [data, setData] = useState<any>('16');
   const dailyData = useSelector(dailyDataSelector);
 
   const todayData = new Date();
 
   const getStep = async () => {
     const lastSteps = await AsyncStorage.getItem('last_steps');
-    console.log(lastSteps)
     if(lastSteps){
       const stepData = JSON.parse(lastSteps)
       dispatch(sendUserData(stepData));
@@ -39,8 +38,14 @@ const MainScreen = () => {
     getStep();
   }, []);
 
+  const dayIsOff = () => {
+    Pedometer.stopPedometerUpdates();
+    setIsStart(false);
+    dispatch(refreshDailyState());
+    setTime('0 : 0 : 0');
+  }
+
   const onStart = async () => {
-    console.log('onStart');
     const userId = await AsyncStorage.getItem('user_id');
     const timeStart = new Date();
     const startTime = moment(timeStart);
@@ -49,11 +54,14 @@ const MainScreen = () => {
       const duration = moment.duration(endTime.diff(startTime));
       const time = `${duration.hours()} : ${duration.minutes()} : ${duration.seconds()}`
       setTime(time);
-      console.log(todayData)
+      if(moment(startTime).format('D') !== moment(endTime).format('D')){
+        dayIsOff()
+        clearInterval(intervalId);
+      }
     }, 1000);
     setIntervalId(intervalId);
     setIsStart(true);
- 
+    
     Pedometer.startPedometerUpdatesFromDate(timeStart.getTime(), pedometerData => {
       const distance = pedometerData?.distance ? pedometerData?.distance / 1000 : 0;
       const tokensData = pedometerData?.numberOfSteps
@@ -106,7 +114,6 @@ const MainScreen = () => {
       dispatch(refreshDailyState());
       return;
     }
-   
   };
 
   const onPressButton = async () => {
