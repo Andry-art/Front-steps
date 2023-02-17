@@ -7,16 +7,21 @@ interface Props {
   isSecondary?: boolean;
   disabled?: boolean;
   style?: any;
+  isMain?: boolean;
 }
 
-const Button: FC<Props> = ({ title, onPress, isSecondary, disabled, style }) => {
+const Button: FC<Props> = ({ title, onPress, isSecondary, disabled, style, isMain }) => {
   return (
     <TouchableOpacity
       style={isSecondary ? styles.buttonSecondary : [styles.button, style]}
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={isSecondary ? styles.textSecondary : styles.text}>{title}</Text>
+      {isMain ? (
+        <Text style={styles.main}>{title.toLocaleUpperCase()}</Text>
+      ) : (
+        <Text style={isSecondary ? styles.textSecondary : styles.text}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -50,6 +55,11 @@ const styles = StyleSheet.create({
   textSecondary: {
     color: 'black',
   },
+  main:{
+    fontSize: 25,
+    fontWeight: '700',
+    color: 'white',
+  }
 });
 
 export default Button;

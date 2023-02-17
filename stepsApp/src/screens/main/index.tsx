@@ -14,6 +14,18 @@ import {
 import CommonInfo from './commonInfo';
 import { dailyDataSelector } from '../../selectors/userDataSelector';
 import { useNetInfo } from '@react-native-community/netinfo';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  interpolate,
+  withRepeat,
+  withSequence,
+  withTiming,
+  withDelay,
+  interpolateColor,
+} from 'react-native-reanimated';
+
 
 const MainScreen = () => {
   const dispatch = useDispatch();
@@ -21,15 +33,15 @@ const MainScreen = () => {
   const [time, setTime] = useState('0 : 0 : 0');
   const [intervalId, setIntervalId] = useState<any>(0);
   const { isConnected } = useNetInfo();
-  const [data, setData] = useState<any>('16');
   const dailyData = useSelector(dailyDataSelector);
+  const animatedValue = useSharedValue(0);
 
   const todayData = new Date();
 
   const getStep = async () => {
     const lastSteps = await AsyncStorage.getItem('last_steps');
-    if(lastSteps){
-      const stepData = JSON.parse(lastSteps)
+    if (lastSteps) {
+      const stepData = JSON.parse(lastSteps);
       dispatch(sendUserData(stepData));
     }
   };
@@ -39,29 +51,42 @@ const MainScreen = () => {
   }, []);
 
   const dayIsOff = () => {
+    animatedValue.value = withSpring(0);
     Pedometer.stopPedometerUpdates();
     setIsStart(false);
     dispatch(refreshDailyState());
     setTime('0 : 0 : 0');
-  }
+  };
 
   const onStart = async () => {
+    animatedValue.value = withSequence(
+      withSpring(20),
+      withRepeat(
+        withSequence(
+          withTiming(10, { duration: 3000 }),
+          withDelay(500, withTiming(20, { duration: 2000 })),
+        ),
+        -1,
+        true,
+      ),
+    );
+
     const userId = await AsyncStorage.getItem('user_id');
     const timeStart = new Date();
     const startTime = moment(timeStart);
     const intervalId = setInterval(() => {
       const endTime = moment(new Date());
       const duration = moment.duration(endTime.diff(startTime));
-      const time = `${duration.hours()} : ${duration.minutes()} : ${duration.seconds()}`
+      const time = `${duration.hours()} : ${duration.minutes()} : ${duration.seconds()}`;
       setTime(time);
-      if(moment(startTime).format('D') !== moment(endTime).format('D')){
-        dayIsOff()
+      if (moment(startTime).format('D') !== moment(endTime).format('D')) {
+        dayIsOff();
         clearInterval(intervalId);
       }
     }, 1000);
     setIntervalId(intervalId);
     setIsStart(true);
-    
+
     Pedometer.startPedometerUpdatesFromDate(timeStart.getTime(), pedometerData => {
       const distance = pedometerData?.distance ? pedometerData?.distance / 1000 : 0;
       const tokensData = pedometerData?.numberOfSteps
@@ -81,7 +106,8 @@ const MainScreen = () => {
   };
 
   const onEnd = async () => {
-    if(isConnected){
+    animatedValue.value = withSequence(withTiming(20), withTiming(0));
+    if (isConnected) {
       Pedometer.stopPedometerUpdates();
       setIsStart(false);
       if (dailyData.userId) {
@@ -98,7 +124,7 @@ const MainScreen = () => {
       setTime('0 : 0 : 0');
       clearInterval(intervalId);
       return;
-    }else {
+    } else {
       Pedometer.stopPedometerUpdates();
       setIsStart(false);
       const lastSteps = {
@@ -108,8 +134,8 @@ const MainScreen = () => {
         tokens: dailyData.tokens,
       };
       await AsyncStorage.setItem('last_steps', JSON.stringify(lastSteps));
-     
-      setTime('0 : 0 : 0');;
+
+      setTime('0 : 0 : 0');
       clearInterval(intervalId);
       dispatch(refreshDailyState());
       return;
@@ -124,36 +150,66 @@ const MainScreen = () => {
         Alert.alert('Turn on internet before start');
       }
     } else {
-        onEnd();
+      onEnd();
     }
-  }
-
-
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.tokenContainer}>
-          <View style={styles.tokenCircle}>
-            <Text style={styles.tokenInfo}>{dailyData.tokens}</Text>
-            <Text style={styles.tokenTitle}>SP per walk</Text>
-          </View>
-        </View>
-        <View style={styles.buttomContainer}>
-          <CommonInfo
-            steps={dailyData?.steps}
-            distance={dailyData?.distance}
-            time={time}
-          />
-          <Button
-            title={isStart ? 'stop' : 'start'}
-            onPress={onPressButton}
-            style={isStart ? styles.buttonColorStop : styles.buttonColorStart}
-          />
-        </View>
-      </SafeAreaView>
-    );
   };
 
+  const firstCircleAnimate = useAnimatedStyle(() => {
+    const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 200, 210, 220, 250]);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#A0EAFA','#245EB5']);
+    return {
+      width: size,
+      height: size,
+      borderColor: borderColor
+    };
+  });
 
+  const secondCircleAnimate = useAnimatedStyle(() => {
+    const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 200, 220, 260, 320]);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#A0EAFA','#245EB5']);
+    return {
+      width: size,
+      height: size,
+      borderColor: borderColor
+    };
+  });
+
+  const thirdBackgroundCircle = useAnimatedStyle(() => {
+    const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 220, 260, 320, 390]);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#A0EAFA','#245EB5']);
+    return {
+      width: size,
+      height: size,
+      borderColor: borderColor
+    };
+  });
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.tokenContainer}>
+        <Animated.View style={[styles.thirdBackgroundCircle, thirdBackgroundCircle]}>
+          <Animated.View style={[styles.secondBackgroundCircle, secondCircleAnimate]}>
+            <Animated.View style={[styles.firstBackgroundCircle, firstCircleAnimate]}>
+              <View style={styles.tokenCircle}>
+                <Text style={styles.tokenInfo}>{dailyData.tokens}</Text>
+                <Text style={styles.tokenTitle}>SP per walk</Text>
+              </View>
+            </Animated.View>
+          </Animated.View>
+        </Animated.View>
+      </View>
+      <View style={styles.buttomContainer}>
+        <CommonInfo steps={dailyData?.steps} distance={dailyData?.distance} time={time} />
+        <Button
+          title={isStart ? 'stop' : 'start'}
+          onPress={onPressButton}
+          isMain
+          style={isStart ? styles.buttonColorStop : styles.buttonColorStart}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
 export default MainScreen;
 
 const styles = StyleSheet.create({
@@ -199,5 +255,23 @@ const styles = StyleSheet.create({
     height: '40%',
     justifyContent: 'flex-end',
     padding: 20,
+  },
+  firstBackgroundCircle: {
+    borderRadius: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 6,
+  },
+  secondBackgroundCircle: {
+    borderRadius: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 12,
+  },
+  thirdBackgroundCircle: {
+    borderRadius: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 20,
   },
 });
