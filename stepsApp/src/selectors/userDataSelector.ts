@@ -1,3 +1,4 @@
+import { createDraftSafeSelector } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 
@@ -17,3 +18,7 @@ export const userHistoryLoadingSelector = (state: RootState) => {
   export const dailyDataSelector = (state: RootState) => {
     return state.userData.dailyData;
   };
+
+  export const weeklyStatistics = createDraftSafeSelector(userHistorySelector, state => {
+    console.log(state)
+  })

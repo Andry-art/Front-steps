@@ -3,6 +3,11 @@ export type RegistrationNavigation = {
   SignUp: undefined;
 };
 
+export type TabNavigation = {
+  Main: undefined;
+  Statistic: undefined;
+};
+
 
 export type textType =
   | 'none'
