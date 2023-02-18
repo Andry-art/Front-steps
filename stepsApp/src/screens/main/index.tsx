@@ -156,7 +156,7 @@ const MainScreen = () => {
 
   const firstCircleAnimate = useAnimatedStyle(() => {
     const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 200, 210, 220, 250]);
-    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#A0EAFA','#245EB5']);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB','#86D9DE']);
     return {
       width: size,
       height: size,
@@ -166,7 +166,7 @@ const MainScreen = () => {
 
   const secondCircleAnimate = useAnimatedStyle(() => {
     const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 200, 220, 260, 320]);
-    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#A0EAFA','#245EB5']);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB','#B7ECEC']);
     return {
       width: size,
       height: size,
@@ -176,7 +176,7 @@ const MainScreen = () => {
 
   const thirdBackgroundCircle = useAnimatedStyle(() => {
     const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 220, 260, 320, 390]);
-    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#A0EAFA','#245EB5']);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB','#DBF6F8']);
     return {
       width: size,
       height: size,
@@ -244,11 +244,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   buttonColorStart: {
-    backgroundColor: '#28B761',
+    backgroundColor: '#57cc09',
     height: 80,
   },
   buttonColorStop: {
-    backgroundColor: '#BB2C2C',
+    backgroundColor: '#f83b31',
     height: 80,
   },
   buttomContainer: {
@@ -260,13 +260,13 @@ const styles = StyleSheet.create({
     borderRadius: 300,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 6,
+    borderWidth: 8,
   },
   secondBackgroundCircle: {
     borderRadius: 300,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 12,
+    borderWidth: 14,
   },
   thirdBackgroundCircle: {
     borderRadius: 300,
