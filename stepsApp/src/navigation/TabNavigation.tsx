@@ -4,10 +4,10 @@ import MainScreen from '../screens/main';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { logOutAction } from '../action/registrationAction';
-import Statistic from '../screens/statistics';
 import stepImageSource from '../../assets/footprint.png'
 import logOutImageSource from '../../assets/logout.png'
 import statisticImageSource from '../../assets/statistics.png'
+import StatisticsTabs from './TopTabStatisticNav';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,12 +39,12 @@ const TabNavigation: FC = () => {
             <View style={styles.iconArea}>
               <Image
                 source={stepImageSource}
-                style={{tintColor: focused ? '#404CB2' : '#C0C0C0'}}
+                style={{tintColor: focused ? '#40B4BB' : '#C0C0C0'}}
               />
               <Text
                 style={[
                   styles.title,
-                  {color: focused ? '#404CB2' : '#C0C0C0'},
+                  {color: focused ? '#40B4BB' : '#C0C0C0'},
                 ]}>
                 Main
               </Text>
@@ -54,7 +54,7 @@ const TabNavigation: FC = () => {
       />
          <Tab.Screen
         name="Statistic"
-        component={Statistic}
+        component={StatisticsTabs}
         options={{
           headerRight: () => (
             <TouchableOpacity onPress={checkStore} style={styles.logOut}>
@@ -67,12 +67,12 @@ const TabNavigation: FC = () => {
             <View style={styles.iconArea}>
               <Image
                 source={statisticImageSource}
-                style={{tintColor: focused ? '#404CB2' : '#C0C0C0'}}
+                style={{tintColor: focused ? '#40B4BB' : '#C0C0C0'}}
               />
               <Text
                 style={[
                   styles.title,
-                  {color: focused ? '#404CB2' : '#C0C0C0'},
+                  {color: focused ? '#40B4BB' : '#C0C0C0'},
                 ]}>
                 Statistic
               </Text>

@@ -3,10 +3,8 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { FC, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
-import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    Bar,
   VictoryBar,
   VictoryChart,
   VictoryContainer,
@@ -16,37 +14,23 @@ import {
 } from 'victory-native';
 import { getUserDataAction } from '../../action/userDataAction';
 import LoadingScreen from '../../components/loadingScreen';
-import { IStatisticType, TabNavigation } from '../../constants/types';
+import { TabNavigation } from '../../constants/types';
 import {
   userHistoryLoadingSelector,
   userHistorySelector,
   weeklyStatisticsSelector,
 } from '../../selectors/userDataSelector';
-import InfoModal from './infoModal';
 
 interface Props {
   navigation: BottomTabNavigationProp<TabNavigation>;
 }
 
-const Weekly: FC<Props> = ({ navigation }) => {
+const Monthly: FC<Props> = ({ navigation }) => {
   const isLoading = useSelector(userHistoryLoadingSelector);
   const weeklyStatistics = useSelector(weeklyStatisticsSelector);
   const dispatch = useDispatch();
   const { width: screenWidth } = useWindowDimensions();
-  const [dailyData, setDailyData] = useState<IStatisticType>();
-  const animatedValue = useSharedValue(0);
-
-  const modalOpacity = useAnimatedStyle(() => {
-    return {
-      opacity: animatedValue.value,
-    };
-  });
-
-  const showInfo = (data:IStatisticType) => {
-    setDailyData(data)
-    animatedValue.value = withTiming(1)
-  }
-
+  const [dailyData, setDailyData] = useState<{ date: string, steps: number, fullDate: string, tokens: number}>();
   const getUserData = async () => {
     const userData = await AsyncStorage.getItem('user_id');
     if (userData) {
@@ -54,22 +38,23 @@ const Weekly: FC<Props> = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    getUserData();
-  }, []);
+//   useEffect(() => {
+//       getUserData();
+//   }, []);
 
   // console.log(historySteps);
   if (isLoading) {
     return <LoadingScreen />;
   }
-    function alert(arg0: string) {
-        throw new Error('Function not implemented.');
-    }
-
   return (
     <SafeAreaView style={styles.container}>
-      <InfoModal date={dailyData?.fullDate} steps={dailyData?.steps} tokens={dailyData?.tokens} animatedStyle={modalOpacity}/>
-
+      {dailyData && (
+        <View>
+          <Text>{dailyData?.fullDate}</Text>
+          <Text>{dailyData?.steps}</Text>
+          <Text>{dailyData?.tokens}</Text>
+        </View>
+      )}
       <View style={styles.chart}>
         <VictoryChart
           width={screenWidth}
@@ -93,11 +78,10 @@ const Weekly: FC<Props> = ({ navigation }) => {
                   onPress: () => {
                     return [
                       {
-                        
                         target: 'data',
                         mutation: props => {
                           console.log(props.datum);
-                          showInfo(props.datum);
+                          setDailyData(props.datum);
                         },
                       },
                     ];
@@ -115,37 +99,13 @@ const Weekly: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
   },
   chart: {
     alignItems: 'center',
   },
-  infoContainer: {
-    backgroundColor: '#FFF',
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 7 },
-    shadowOpacity: 0.2,
-    shadowRadius: 9,
-    elevation: 5,
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  info: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
 });
 
-export default Weekly;
+export default Monthly;

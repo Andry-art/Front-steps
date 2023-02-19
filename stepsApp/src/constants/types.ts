@@ -51,7 +51,7 @@ export type textType =
 
   export interface IDailyData {
     userId?: string | null, 
-    date?: string, 
+    date?: string | number, 
     steps?: number, 
     tokens?: number,
     distance?: number 
@@ -61,5 +61,12 @@ export type textType =
     data: Array<IUserDataResponse>;
     dailyData: IDailyData,
     isLoading: boolean;
-    error: String;
+    error: string;
+  }
+
+  export interface IStatisticType {
+    date: string;
+    steps: number;
+    fullDate: string;
+    tokens: number;
   }
