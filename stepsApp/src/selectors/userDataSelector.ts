@@ -37,3 +37,24 @@ export const weeklyStatisticsSelector = createDraftSafeSelector(userHistorySelec
   });
   return arr.reverse();
 });
+
+export const monthlyStatisticsSelector = createDraftSafeSelector(userHistorySelector, state => {
+  const daysInMonth = moment(new Date()).daysInMonth();
+  const days = [];
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(moment(`${i}.MM.YYYY`, "DD.MM.YYYY'").format('DD.MM.YYYY'));
+  }
+  const arr = days.map(item => {
+    const itemDate = state.find(it => it.date === item);
+    if (itemDate) {
+      const dateArr = itemDate.date.split('.');
+      const day = moment(dateArr, 'DD.MM.YYYY').format('DD');
+      const fullDate = moment(dateArr, 'DD.MM.YYYY').format('DD MMMM YYYY');
+      return { date: day, steps: itemDate.steps, fullDate, tokens: itemDate.tokens};
+    } else {
+      const day = moment(item, 'DD.MM.YYYY').format('DD');
+      return { steps: 0, date: day };
+    }
+  });
+  return arr;
+});

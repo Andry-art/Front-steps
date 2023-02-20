@@ -1,25 +1,15 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { FC, useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { BarChart } from 'react-native-chart-kit';
+import { SafeAreaView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    Bar,
-  VictoryBar,
-  VictoryChart,
-  VictoryContainer,
-  VictoryLabel,
-  VictoryTheme,
-  VictoryTooltip,
-} from 'victory-native';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { getUserDataAction } from '../../action/userDataAction';
 import LoadingScreen from '../../components/loadingScreen';
 import { IStatisticType, TabNavigation } from '../../constants/types';
 import {
   userHistoryLoadingSelector,
-  userHistorySelector,
   weeklyStatisticsSelector,
 } from '../../selectors/userDataSelector';
 import InfoModal from './infoModal';
@@ -42,10 +32,10 @@ const Weekly: FC<Props> = ({ navigation }) => {
     };
   });
 
-  const showInfo = (data:IStatisticType) => {
-    setDailyData(data)
-    animatedValue.value = withTiming(1)
-  }
+  const showInfo = (data: IStatisticType) => {
+    setDailyData(data);
+    animatedValue.value = withTiming(1);
+  };
 
   const getUserData = async () => {
     const userData = await AsyncStorage.getItem('user_id');
@@ -58,18 +48,18 @@ const Weekly: FC<Props> = ({ navigation }) => {
     getUserData();
   }, []);
 
-  // console.log(historySteps);
   if (isLoading) {
     return <LoadingScreen />;
   }
-    function alert(arg0: string) {
-        throw new Error('Function not implemented.');
-    }
 
   return (
     <SafeAreaView style={styles.container}>
-      <InfoModal date={dailyData?.fullDate} steps={dailyData?.steps} tokens={dailyData?.tokens} animatedStyle={modalOpacity}/>
-
+      <InfoModal
+        date={dailyData?.fullDate}
+        steps={dailyData?.steps}
+        tokens={dailyData?.tokens}
+        animatedStyle={modalOpacity}
+      />
       <View style={styles.chart}>
         <VictoryChart
           width={screenWidth}
@@ -79,32 +69,32 @@ const Weekly: FC<Props> = ({ navigation }) => {
             duration: 600,
           }}
         >
+          <VictoryAxis
+            dependentAxis
+            style={{
+              grid: { stroke: 'none' },
+            }}
+          />
           <VictoryBar
+            name="Bar"
             data={weeklyStatistics}
             x="date"
             y="steps"
             width={100}
             cornerRadius={8}
             style={{ data: { fill: '#40B4BB', width: 30, borderRadius: 30 } }}
+            eventKey={'steps'}
             events={[
               {
                 target: 'data',
-                eventHandlers: {
-                  onPress: () => {
-                    return [
-                      {
-                        
-                        target: 'data',
-                        mutation: props => {
-                          console.log(props.datum);
-                          showInfo(props.datum);
-                        },
-                      },
-                    ];
-                  },
-                },
+                eventHandlers: { onPressIn: (event, data) => showInfo(data.datum) },
               },
             ]}
+          />
+          <VictoryAxis
+            style={{
+              grid: { stroke: 'none' },
+            }}
           />
         </VictoryChart>
       </View>
