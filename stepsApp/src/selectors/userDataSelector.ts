@@ -29,13 +29,19 @@ export const weeklyStatisticsSelector = createDraftSafeSelector(userHistorySelec
       const dateArr = itemDate.date.split('.');
       const day = moment(dateArr, 'DD.MM.YYYY').format('DD');
       const fullDate = moment(dateArr, 'DD.MM.YYYY').format('DD MMMM YYYY');
-      return { date: day, steps: itemDate.steps, fullDate, tokens: itemDate.tokens};
+      return { date: day, steps: itemDate.steps, fullDate, tokens: itemDate.tokens };
     } else {
       const day = moment(item, 'DD.MM.YYYY').format('DD');
-      return { steps: 0, date: day };
+      return { steps: 0, date: day, tokens: 0 };
     }
   });
-  return arr.reverse();
+  const totalSteps = arr.map(it=>it.steps).reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+  const totalTokens = arr.map(it=>it.tokens).reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+  return {data: arr.reverse(), totalSteps, totalTokens};
 });
 
 export const monthlyStatisticsSelector = createDraftSafeSelector(userHistorySelector, state => {
@@ -50,11 +56,65 @@ export const monthlyStatisticsSelector = createDraftSafeSelector(userHistorySele
       const dateArr = itemDate.date.split('.');
       const day = moment(dateArr, 'DD.MM.YYYY').format('DD');
       const fullDate = moment(dateArr, 'DD.MM.YYYY').format('DD MMMM YYYY');
-      return { date: day, steps: itemDate.steps, fullDate, tokens: itemDate.tokens};
+      return { date: day, steps: itemDate.steps, fullDate, tokens: itemDate.tokens };
     } else {
       const day = moment(item, 'DD.MM.YYYY').format('DD');
-      return { steps: 0, date: day };
+      return { steps: 0, date: day , tokens: 0};
     }
   });
-  return arr;
+  const totalSteps = arr.map(it=>it.steps).reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+  const totalTokens = arr.map(it=>it.tokens).reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+  return {data: arr, totalSteps, totalTokens};;
+});
+
+export const yearlyStatisticsSelector = createDraftSafeSelector(userHistorySelector, state => {
+  const allMonthsData = [];
+
+  for (let i = 0; i < 12; i++) {
+    const monthName = moment().month(i).format('MMM');
+    const fullMonthName = moment().month(i).format('MMMM');
+    const month = moment().month(i).format('MM.YYYY');
+    const arrayOfMonthData = state.filter(item => {
+      const dateArr = item.date.split('.');
+      const day = moment(dateArr, 'DD.MM.YYYY').format('MM.YYYY');
+      return day === month;
+    });
+    if (arrayOfMonthData.length > 0) {
+      const sumOfSteps = arrayOfMonthData
+        .map(it => it.steps)
+        .reduce((acc, curr) => {
+          return acc + curr;
+        }, 0);
+
+      const sumOfTokens = arrayOfMonthData
+        .map(it => it.tokens)
+        .reduce((acc, curr) => {
+          return acc + curr;
+        }, 0);
+
+      const mothData = {
+        month: monthName,
+        steps: sumOfSteps,
+        tokens: sumOfTokens,
+        fullDate: fullMonthName,
+      };
+
+      allMonthsData.push(mothData);
+    } else {
+      allMonthsData.push({ month: monthName, steps: 0, tokens: 0, fullDate: fullMonthName });
+    }
+  }
+
+  const totalSteps = allMonthsData.map(it=>it.steps).reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+  const totalTokens = allMonthsData.map(it=>it.tokens).reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+
+  return {data: allMonthsData, totalSteps, totalTokens};
 });

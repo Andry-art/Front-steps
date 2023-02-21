@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { FC, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { getUserDataAction } from '../../action/userDataAction';
@@ -24,17 +23,10 @@ const Weekly: FC<Props> = ({ navigation }) => {
   const dispatch = useDispatch();
   const { width: screenWidth } = useWindowDimensions();
   const [dailyData, setDailyData] = useState<IStatisticType>();
-  const animatedValue = useSharedValue(0);
 
-  const modalOpacity = useAnimatedStyle(() => {
-    return {
-      opacity: animatedValue.value,
-    };
-  });
 
   const showInfo = (data: IStatisticType) => {
     setDailyData(data);
-    animatedValue.value = withTiming(1);
   };
 
   const getUserData = async () => {
@@ -58,7 +50,8 @@ const Weekly: FC<Props> = ({ navigation }) => {
         date={dailyData?.fullDate}
         steps={dailyData?.steps}
         tokens={dailyData?.tokens}
-        animatedStyle={modalOpacity}
+        totalSteps={weeklyStatistics.totalSteps}
+        totalTokens={weeklyStatistics.totalTokens}
       />
       <View style={styles.chart}>
         <VictoryChart
@@ -77,7 +70,7 @@ const Weekly: FC<Props> = ({ navigation }) => {
           />
           <VictoryBar
             name="Bar"
-            data={weeklyStatistics}
+            data={weeklyStatistics.data}
             x="date"
             y="steps"
             width={100}
@@ -111,30 +104,6 @@ const styles = StyleSheet.create({
   },
   chart: {
     alignItems: 'center',
-  },
-  infoContainer: {
-    backgroundColor: '#FFF',
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 7 },
-    shadowOpacity: 0.2,
-    shadowRadius: 9,
-    elevation: 5,
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  info: {
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
 

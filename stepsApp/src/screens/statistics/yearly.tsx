@@ -6,36 +6,39 @@ import LoadingScreen from '../../components/loadingScreen';
 import { IStatisticType } from '../../constants/types';
 import {
   userHistoryLoadingSelector,
-  monthlyStatisticsSelector,
+  yearlyStatisticsSelector,
 } from '../../selectors/userDataSelector';
 import InfoModal from './infoModal';
 
-const Monthly: FC = () => {
+const Yearly: FC = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
-  const monthlyStatistics = useSelector(monthlyStatisticsSelector);
+  const yearlyStatistics = useSelector(yearlyStatisticsSelector);
   const { width: screenWidth } = useWindowDimensions();
-  const [dailyData, setDailyData] = useState<IStatisticType>();
-
+  const [monthlyData, setMonthlyData] = useState<IStatisticType>();
+ 
   const showInfo = useCallback((data: IStatisticType) => {
-    setDailyData(data);
-  }, []);
+    setMonthlyData(data);
+  },[])
 
   if (isLoading) {
     return <LoadingScreen />;
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <InfoModal
-        date={dailyData?.fullDate}
-        steps={dailyData?.steps}
-        tokens={dailyData?.tokens}
-        totalSteps={monthlyStatistics.totalSteps}
-        totalTokens={monthlyStatistics.totalTokens}
+        date={monthlyData?.fullDate}
+        steps={monthlyData?.steps}
+        tokens={monthlyData?.tokens}
+        totalSteps={yearlyStatistics.totalSteps}
+        totalTokens={yearlyStatistics.totalTokens}
+        year
       />
       <View style={styles.chart}>
         <VictoryChart
           width={screenWidth}
           theme={VictoryTheme.material}
+          domainPadding={{ x: 15 }}
           animate={{
             duration: 600,
           }}
@@ -46,15 +49,14 @@ const Monthly: FC = () => {
               grid: { stroke: 'none' },
             }}
           />
-
           <VictoryBar
             name="Bar"
-            data={monthlyStatistics.data}
-            x="date"
+            data={yearlyStatistics.data}
+            x="month"
             y="steps"
             width={100}
-            cornerRadius={5}
-            style={{ data: { fill: '#40B4BB', width: 10, borderRadius: 10 } }}
+            cornerRadius={8}
+            style={{ data: { fill: '#40B4BB', width: 20, borderRadius: 30 } }}
             events={[
               {
                 target: 'data',
@@ -63,7 +65,6 @@ const Monthly: FC = () => {
             ]}
           />
           <VictoryAxis
-            tickCount={6}
             style={{
               grid: { stroke: 'none' },
             }}
@@ -86,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Monthly;
+export default Yearly;

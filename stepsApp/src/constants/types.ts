@@ -41,12 +41,12 @@ export type textType =
   | undefined;
 
   export interface IUserDataResponse {
-    "userId": String,
-    "date": String,
-    "steps": Number,
-    "tokens": Number,
-    "_id": String,
-    "__v": Number
+    "userId": string,
+    "date": string,
+    "steps": number,
+    "tokens": number,
+    "_id": string,
+    "__v": number
   }
 
   export interface IDailyData {

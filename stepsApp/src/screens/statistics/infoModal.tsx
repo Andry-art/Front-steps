@@ -6,25 +6,42 @@ interface Props {
   date?: string;
   steps?: number;
   tokens?: number;
-  animatedStyle?: any;
+  totalSteps?: number;
+  totalTokens?: number;
+  year?: boolean
 }
 
-const InfoModal: FC<Props> = ({ date, steps, tokens, animatedStyle }) => {
+const InfoModal: FC<Props> = ({ date, steps, tokens, totalSteps, totalTokens, year }) => {
   return (
-    <Animated.View style={[styles.infoContainer, animatedStyle]}>
-      <View style={styles.item}>
-        <Text style={styles.title}>Date:</Text>
-        <Text style={styles.info}>{date}</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.title}>Steps:</Text>
-        <Text style={styles.info}>{steps}</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.title}>Tokens:</Text>
-        <Text style={styles.info}>{tokens}</Text>
-      </View>
-    </Animated.View>
+    <>
+      {steps ? (
+        <View style={styles.infoContainer}>
+          <View style={styles.item}>
+            <Text style={styles.title}>{year ? 'Month:':'Date:'}</Text>
+            <Text style={styles.info}>{date}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.title}>Steps:</Text>
+            <Text style={styles.info}>{steps}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.title}>Tokens:</Text>
+            <Text style={styles.info}>{tokens}</Text>
+          </View>
+        </View>
+      ) : (
+        <View style={styles.infoContainer}>
+          <View style={styles.item}>
+            <Text style={styles.title}>Total steps:</Text>
+            <Text style={styles.info}>{totalSteps}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.title}>Total tokens:</Text>
+            <Text style={styles.info}>{totalTokens}</Text>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 
