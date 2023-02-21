@@ -337,6 +337,8 @@ PODS:
     - React-Core
   - react-native-netinfo (9.3.7):
     - React-Core
+  - react-native-pager-view (6.1.4):
+    - React-Core
   - react-native-safe-area-context (4.5.0):
     - RCT-Folly
     - RCTRequired
@@ -517,6 +519,7 @@ DEPENDENCIES:
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-universal-pedometer (from `../node_modules/@t2tx/react-native-universal-pedometer`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -603,6 +606,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-encrypted-storage"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-universal-pedometer:
@@ -681,6 +686,7 @@ SPEC CHECKSUMS:
   react-native-config: 5330c8258265c1e5fdb8c009d2cabd6badd96727
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
+  react-native-pager-view: b58cb9e9f42f64e50cab3040815772c1d119a2e2
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-universal-pedometer: 5ee0100c8f6b6e673b0a01bc3317f26ad3b5d97f
   React-perflogger: c7ccda3d1d1da837f7ff4e54e816022a6803ee87

@@ -1,44 +1,24 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { SafeAreaView, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
-import { getUserDataAction } from '../../action/userDataAction';
 import LoadingScreen from '../../components/loadingScreen';
-import { IStatisticType, TabNavigation } from '../../constants/types';
+import { IStatisticType } from '../../constants/types';
 import {
   userHistoryLoadingSelector,
-  weeklyStatisticsSelector,
+  yearlyStatisticsSelector,
 } from '../../selectors/userDataSelector';
 import InfoModal from './infoModal';
 
-interface Props {
-  navigation: BottomTabNavigationProp<TabNavigation>;
-}
-
-const Weekly: FC<Props> = ({ navigation }) => {
+const Yearly: FC = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
-  const weeklyStatistics = useSelector(weeklyStatisticsSelector);
-  const dispatch = useDispatch();
+  const yearlyStatistics = useSelector(yearlyStatisticsSelector);
   const { width: screenWidth } = useWindowDimensions();
-  const [dailyData, setDailyData] = useState<IStatisticType>();
-
-
-  const showInfo = (data: IStatisticType) => {
-    setDailyData(data);
-  };
-
-  const getUserData = async () => {
-    const userData = await AsyncStorage.getItem('user_id');
-    if (userData) {
-      dispatch(getUserDataAction(userData));
-    }
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
+  const [monthlyData, setMonthlyData] = useState<IStatisticType>();
+ 
+  const showInfo = useCallback((data: IStatisticType) => {
+    setMonthlyData(data);
+  },[])
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -47,11 +27,12 @@ const Weekly: FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <InfoModal
-        date={dailyData?.fullDate}
-        steps={dailyData?.steps}
-        tokens={dailyData?.tokens}
-        totalSteps={weeklyStatistics.totalSteps}
-        totalTokens={weeklyStatistics.totalTokens}
+        date={monthlyData?.fullDate}
+        steps={monthlyData?.steps}
+        tokens={monthlyData?.tokens}
+        totalSteps={yearlyStatistics.totalSteps}
+        totalTokens={yearlyStatistics.totalTokens}
+        year
       />
       <View style={styles.chart}>
         <VictoryChart
@@ -70,13 +51,12 @@ const Weekly: FC<Props> = ({ navigation }) => {
           />
           <VictoryBar
             name="Bar"
-            data={weeklyStatistics.data}
-            x="date"
+            data={yearlyStatistics.data}
+            x="month"
             y="steps"
             width={100}
             cornerRadius={8}
-            style={{ data: { fill: '#40B4BB', width: 30, borderRadius: 30 } }}
-            eventKey={'steps'}
+            style={{ data: { fill: '#40B4BB', width: 20, borderRadius: 30 } }}
             events={[
               {
                 target: 'data',
@@ -107,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Weekly;
+export default Yearly;
