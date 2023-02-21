@@ -3,15 +3,15 @@ import Monthly from '../screens/statistics/monthly';
 import WeeklyStatistic from '../screens/statistics/weekly';
 import Yearly from '../screens/statistics/yearly';
 
-const TopTab = createMaterialTopTabNavigator();
+const TopTabStatistics = createMaterialTopTabNavigator();
 
 function StatisticsTabs() {
   return (
-    <TopTab.Navigator>
-      <TopTab.Screen name="week" component={WeeklyStatistic} />
-      <TopTab.Screen name="month" component={Monthly} />
-      <TopTab.Screen name="year" component={Yearly} />
-    </TopTab.Navigator>
+    <TopTabStatistics.Navigator>
+      <TopTabStatistics.Screen name="week" component={WeeklyStatistic} />
+      <TopTabStatistics.Screen name="month" component={Monthly} />
+      <TopTabStatistics.Screen name="year" component={Yearly} />
+    </TopTabStatistics.Navigator>
   );
 }
 

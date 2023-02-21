@@ -8,6 +8,8 @@ import stepImageSource from '../../assets/footprint.png'
 import logOutImageSource from '../../assets/logout.png'
 import statisticImageSource from '../../assets/statistics.png'
 import StatisticsTabs from './TopTabStatisticNav';
+import tagImageSource from '../../assets/tag.png'
+import DiscountsTopTabs from './TopTabDiscounts';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,6 +49,34 @@ const TabNavigation: FC = () => {
                   {color: focused ? '#40B4BB' : '#C0C0C0'},
                 ]}>
                 Main
+              </Text>
+            </View>
+          ),
+        }}
+      />
+          <Tab.Screen
+        name="Discounts"
+        component={DiscountsTopTabs}
+        options={{
+          headerRight: () => (
+            <TouchableOpacity onPress={checkStore} style={styles.logOut}>
+            <Image
+              source={logOutImageSource}
+            />
+          </TouchableOpacity>
+          ),
+          tabBarIcon: ({focused}) => (
+            <View style={styles.iconArea}>
+              <Image
+                source={tagImageSource}
+                style={{tintColor: focused ? '#40B4BB' : '#C0C0C0'}}
+              />
+              <Text
+                style={[
+                  styles.title,
+                  {color: focused ? '#40B4BB' : '#C0C0C0'},
+                ]}>
+                Discounts
               </Text>
             </View>
           ),
