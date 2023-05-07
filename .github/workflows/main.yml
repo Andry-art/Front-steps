@@ -8,9 +8,10 @@ jobs:
      runs-on: ubuntu-latest
 
      steps: 
-        - run: actions/checkout@v2
+        - name: blabla
+          run: actions/checkout@v2
         - name: init-project
-        - run: |
+          run: |
                 cd Front-steps/stepsApp
                 yarn init --yes
 
