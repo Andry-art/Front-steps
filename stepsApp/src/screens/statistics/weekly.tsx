@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { FC, useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, useWindowDimensions, View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { getUserDataAction } from '../../action/userDataAction';
@@ -17,13 +17,12 @@ interface Props {
   navigation: BottomTabNavigationProp<TabNavigation>;
 }
 
-const Weekly: FC<Props> = ({ navigation }) => {
+const Weekly: FC<Props> = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
   const weeklyStatistics = useSelector(weeklyStatisticsSelector);
   const dispatch = useDispatch();
   const { width: screenWidth } = useWindowDimensions();
   const [dailyData, setDailyData] = useState<IStatisticType>();
-
 
   const showInfo = (data: IStatisticType) => {
     setDailyData(data);
@@ -40,6 +39,20 @@ const Weekly: FC<Props> = ({ navigation }) => {
     getUserData();
   }, []);
 
+  if (!weeklyStatistics.data.find(it => it.steps > 0)) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text> No steps for this week</Text>
+      </View>
+    );
+  }
   if (isLoading) {
     return <LoadingScreen />;
   }

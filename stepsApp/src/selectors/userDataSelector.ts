@@ -35,13 +35,17 @@ export const weeklyStatisticsSelector = createDraftSafeSelector(userHistorySelec
       return { steps: 0, date: day, tokens: 0 };
     }
   });
-  const totalSteps = arr.map(it=>it.steps).reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
-  const totalTokens = arr.map(it=>it.tokens).reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
-  return {data: arr.reverse(), totalSteps, totalTokens};
+  const totalSteps = arr
+    .map(it => it.steps)
+    .reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+  const totalTokens = arr
+    .map(it => it.tokens)
+    .reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+  return { data: arr.reverse(), totalSteps, totalTokens };
 });
 
 export const monthlyStatisticsSelector = createDraftSafeSelector(userHistorySelector, state => {
@@ -59,16 +63,20 @@ export const monthlyStatisticsSelector = createDraftSafeSelector(userHistorySele
       return { date: day, steps: itemDate.steps, fullDate, tokens: itemDate.tokens };
     } else {
       const day = moment(item, 'DD.MM.YYYY').format('DD');
-      return { steps: 0, date: day , tokens: 0};
+      return { steps: 0, date: day, tokens: 0 };
     }
   });
-  const totalSteps = arr.map(it=>it.steps).reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
-  const totalTokens = arr.map(it=>it.tokens).reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
-  return {data: arr, totalSteps, totalTokens};;
+  const totalSteps = arr
+    .map(it => it.steps)
+    .reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+  const totalTokens = arr
+    .map(it => it.tokens)
+    .reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+  return { data: arr, totalSteps, totalTokens };
 });
 
 export const yearlyStatisticsSelector = createDraftSafeSelector(userHistorySelector, state => {
@@ -109,12 +117,21 @@ export const yearlyStatisticsSelector = createDraftSafeSelector(userHistorySelec
     }
   }
 
-  const totalSteps = allMonthsData.map(it=>it.steps).reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
-  const totalTokens = allMonthsData.map(it=>it.tokens).reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
+  const totalSteps = allMonthsData
+    .map(it => it.steps)
+    .reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+  const totalTokens = allMonthsData
+    .map(it => it.tokens)
+    .reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
 
-  return {data: allMonthsData, totalSteps, totalTokens};
+  return { data: allMonthsData, totalSteps, totalTokens };
+});
+
+export const transactionsSelector = createDraftSafeSelector(userHistorySelector, state => {
+  const withTokens = state.filter(it => it.tokens > 0);
+  return withTokens.reverse();
 });

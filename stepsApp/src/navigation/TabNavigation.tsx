@@ -4,10 +4,13 @@ import MainScreen from '../screens/main';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { logOutAction } from '../action/registrationAction';
-import stepImageSource from '../../assets/footprint.png'
-import logOutImageSource from '../../assets/logout.png'
-import statisticImageSource from '../../assets/statistics.png'
+import stepImageSource from '../../assets/footprint.png';
+import logOutImageSource from '../../assets/logout.png';
+import statisticImageSource from '../../assets/statistics.png';
 import StatisticsTabs from './TopTabStatisticNav';
+import tagImageSource from '../../assets/tag.png';
+import DiscountsTopTabs from './TopTabDiscounts';
+import DiscountsStackNavigator from './DiscountsStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,10 +22,11 @@ const TabNavigation: FC = () => {
 
   return (
     <Tab.Navigator
-    screenOptions={{
-      tabBarStyle: styles.tabBarStyle,
-      tabBarShowLabel: false,
-    }}>
+      screenOptions={{
+        tabBarStyle: styles.tabBarStyle,
+        tabBarShowLabel: false,
+      }}
+    >
       <Tab.Screen
         name="MainScreen"
         component={MainScreen}
@@ -30,50 +34,59 @@ const TabNavigation: FC = () => {
           headerTitle: 'Main',
           headerRight: () => (
             <TouchableOpacity onPress={checkStore} style={styles.logOut}>
-              <Image
-                source={logOutImageSource}
-              />
+              <Image source={logOutImageSource} />
             </TouchableOpacity>
           ),
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View style={styles.iconArea}>
               <Image
                 source={stepImageSource}
-                style={{tintColor: focused ? '#40B4BB' : '#C0C0C0'}}
+                style={{ tintColor: focused ? '#40B4BB' : '#C0C0C0' }}
               />
-              <Text
-                style={[
-                  styles.title,
-                  {color: focused ? '#40B4BB' : '#C0C0C0'},
-                ]}>
-                Main
+              <Text style={[styles.title, { color: focused ? '#40B4BB' : '#C0C0C0' }]}>Main</Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Discounts"
+        component={DiscountsStackNavigator}
+        options={{
+          headerShown: false,
+          // headerRight: () => (
+          //   <TouchableOpacity onPress={checkStore} style={styles.logOut}>
+          //     <Image source={logOutImageSource} />
+          //   </TouchableOpacity>
+          // ),
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.iconArea}>
+              <Image
+                source={tagImageSource}
+                style={{ tintColor: focused ? '#40B4BB' : '#C0C0C0' }}
+              />
+              <Text style={[styles.title, { color: focused ? '#40B4BB' : '#C0C0C0' }]}>
+                Discounts
               </Text>
             </View>
           ),
         }}
       />
-         <Tab.Screen
+      <Tab.Screen
         name="Statistic"
         component={StatisticsTabs}
         options={{
           headerRight: () => (
             <TouchableOpacity onPress={checkStore} style={styles.logOut}>
-            <Image
-              source={logOutImageSource}
-            />
-          </TouchableOpacity>
+              <Image source={logOutImageSource} />
+            </TouchableOpacity>
           ),
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View style={styles.iconArea}>
               <Image
                 source={statisticImageSource}
-                style={{tintColor: focused ? '#40B4BB' : '#C0C0C0'}}
+                style={{ tintColor: focused ? '#40B4BB' : '#C0C0C0' }}
               />
-              <Text
-                style={[
-                  styles.title,
-                  {color: focused ? '#40B4BB' : '#C0C0C0'},
-                ]}>
+              <Text style={[styles.title, { color: focused ? '#40B4BB' : '#C0C0C0' }]}>
                 Statistic
               </Text>
             </View>
@@ -83,7 +96,6 @@ const TabNavigation: FC = () => {
     </Tab.Navigator>
   );
 };
-
 
 const styles = StyleSheet.create({
   tabBarStyle: {

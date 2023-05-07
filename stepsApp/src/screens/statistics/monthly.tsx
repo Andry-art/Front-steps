@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from 'react';
-import { SafeAreaView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView, StyleSheet, useWindowDimensions, View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import LoadingScreen from '../../components/loadingScreen';
@@ -19,6 +19,21 @@ const Monthly: FC = () => {
   const showInfo = useCallback((data: IStatisticType) => {
     setDailyData(data);
   }, []);
+
+  if (!monthlyStatistics.data.find(it => it.steps > 0)) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text> No steps for this month</Text>
+      </View>
+    );
+  }
 
   if (isLoading) {
     return <LoadingScreen />;

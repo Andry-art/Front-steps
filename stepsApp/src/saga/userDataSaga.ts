@@ -1,13 +1,15 @@
-import {call, put, takeEvery} from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import { Api } from '../constants/api';
-import { getUserDataAction, getUserDataFaild, getUserDataSucsses, sendUserData } from '../action/userDataAction';
+import {
+  getUserDataAction,
+  getUserDataFaild,
+  getUserDataSucsses,
+  sendUserData,
+} from '../action/userDataAction';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export function* getUserData(
-  action: ReturnType<typeof getUserDataAction>,
-): Generator {
+export function* getUserData(action: ReturnType<typeof getUserDataAction>): Generator {
   try {
-
     const response = (yield call(
       Api.authGet.bind(Api),
       `https://steps-app.cyclic.app/data/userhistory?userId=${action.payload}`,
@@ -25,23 +27,20 @@ export function* getUserData(
   }
 }
 
-export function* postUserData(
-  action: ReturnType<typeof sendUserData>,
-): Generator {
-
+export function* postUserData(action: ReturnType<typeof sendUserData>): Generator {
   try {
-    console.log(action.payload, 'payloadDaily')
+    console.log(action.payload, 'payloadDaily');
     const response = (yield call(
       Api.authPost.bind(Api),
       `https://steps-app.cyclic.app/data/newstepitem`,
-      action.payload
+      action.payload,
     )) as Response | any;
 
     if (!response) {
       yield put(getUserDataFaild('Network isn`t working'));
     }
     if (response) {
-      yield AsyncStorage.removeItem('last_steps')
+      yield AsyncStorage.removeItem('last_steps');
     }
   } catch (error) {
     // yield put(getUserDataFaild((error as Error).message));
