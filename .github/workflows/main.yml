@@ -1,0 +1,14 @@
+name: check-build,
+
+on: 
+  pull_request:
+            branches: 
+            - main,
+jobs:
+   eslint: 
+     runs-on: ubuntu-latest
+   
+     steps: 
+        - name: check-eslint
+          run: -yarn lint
+            
