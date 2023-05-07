@@ -8,7 +8,7 @@ jobs:
    
      steps:             
         - name: init-app
-          working-directory: ../stepsApp
+          working-directory: cd ../stepsApp
           run: pwd
           
           
