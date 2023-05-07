@@ -3,6 +3,15 @@ name: check-build
 on: [pull_request]
 
 jobs:
+
+  project: 
+     runs-on: ubuntu-latest
+   
+     steps: 
+        - name: go-to-project
+          run: cd /home/runner/work/Front-steps/stepsApp
+          
+          
   init: 
      runs-on: ubuntu-latest
    
