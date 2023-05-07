@@ -1,9 +1,7 @@
 name: check-build,
 
-on: 
-  push:
-      branches: 
-      - main,
+on: [pull_request]
+
 jobs:
    eslint: 
      runs-on: ubuntu-latest
