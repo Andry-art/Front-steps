@@ -8,7 +8,7 @@ jobs:
    
      steps: 
         - name: go-to-app
-          run: cd ../../stepsApp/
+          run: cd stepsApp/
         - name: check-lint
           run: yarn lint
           
