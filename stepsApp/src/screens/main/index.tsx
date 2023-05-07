@@ -1,5 +1,5 @@
 import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pedometer from '@t2tx/react-native-universal-pedometer';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
