@@ -1,6 +1,14 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
 import React, { FC, useEffect, useState } from 'react';
-import { Alert, Keyboard, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanError, userLogIn } from '../../action/registrationAction';
 import Button from '../../components/Button';
@@ -25,9 +33,9 @@ const LogIn: FC<Props> = ({ navigation }) => {
   const error = useSelector(logInError);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(cleanError())
-  })
+  useEffect(() => {
+    dispatch(cleanError());
+  });
 
   const hideKeyBoard = () => {
     Keyboard.dismiss();
@@ -52,36 +60,36 @@ const LogIn: FC<Props> = ({ navigation }) => {
 
   return (
     <TouchableWithoutFeedback onPress={hideKeyBoard}>
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
-      <View>
-        <Input
-          placeholder={'email'}
-          onChangeText={handleChange('email')}
-          value={values.email}
-          textContentType="emailAddress"
-          keyboardType="email-address"
-          onBlur={handleBlur('email')}
-          errors={errors.email}
-          isPassword={false}
-          touched={touched.email}
-          isRegistration={true}
-        />
-        <Input
-          placeholder={'password'}
-          onChangeText={handleChange('password')}
-          value={values.password}
-          textContentType="password"
-          onBlur={handleBlur('password')}
-          errors={errors.password}
-          isPassword={true}
-          touched={touched.password}
-          isRegistration={true}
-        />
-        <Button title={'LogIn'} onPress={handleSubmit} disabled={!(isValid && dirty)} />
-        <Button title={'SignUp'} onPress={goToSignUp} isSecondary />
-      </View>
-    </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>Log In</Text>
+        <View>
+          <Input
+            placeholder={'email'}
+            onChangeText={handleChange('email')}
+            value={values.email}
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            onBlur={handleBlur('email')}
+            errors={errors.email}
+            isPassword={false}
+            touched={touched.email}
+            isRegistration={true}
+          />
+          <Input
+            placeholder={'password'}
+            onChangeText={handleChange('password')}
+            value={values.password}
+            textContentType="password"
+            onBlur={handleBlur('password')}
+            errors={errors.password}
+            isPassword={true}
+            touched={touched.password}
+            isRegistration={true}
+          />
+          <Button title={'LogIn'} onPress={handleSubmit} disabled={!(isValid && dirty)} />
+          <Button title={'SignUp'} onPress={goToSignUp} isSecondary />
+        </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };

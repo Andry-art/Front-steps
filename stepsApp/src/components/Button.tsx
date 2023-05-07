@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
   textSecondary: {
     color: 'black',
   },
-  main:{
+  main: {
     fontSize: 25,
     fontWeight: '700',
     color: 'white',
-  }
+  },
 });
 
 export default Button;

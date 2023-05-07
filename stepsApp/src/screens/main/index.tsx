@@ -26,7 +26,6 @@ import Animated, {
   interpolateColor,
 } from 'react-native-reanimated';
 
-
 const MainScreen = () => {
   const dispatch = useDispatch();
   const [isStart, setIsStart] = useState<boolean>(false);
@@ -156,31 +155,31 @@ const MainScreen = () => {
 
   const firstCircleAnimate = useAnimatedStyle(() => {
     const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 200, 210, 220, 250]);
-    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB','#86D9DE']);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB', '#86D9DE']);
     return {
       width: size,
       height: size,
-      borderColor: borderColor
+      borderColor: borderColor,
     };
   });
 
   const secondCircleAnimate = useAnimatedStyle(() => {
     const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 200, 220, 260, 320]);
-    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB','#B7ECEC']);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB', '#B7ECEC']);
     return {
       width: size,
       height: size,
-      borderColor: borderColor
+      borderColor: borderColor,
     };
   });
 
   const thirdBackgroundCircle = useAnimatedStyle(() => {
     const size = interpolate(animatedValue.value, [0, 5, 10, 15, 20], [190, 220, 260, 320, 390]);
-    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB','#DBF6F8']);
+    const borderColor = interpolateColor(animatedValue.value, [0, 20], ['#40B4BB', '#DBF6F8']);
     return {
       width: size,
       height: size,
-      borderColor: borderColor
+      borderColor: borderColor,
     };
   });
 

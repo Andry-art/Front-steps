@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   extends: [
     'eslint:recommended',
     '@react-native-community',
@@ -8,7 +9,7 @@ module.exports = {
     'prettier',
   ],
   plugins: ['react', 'react-native', 'prettier'],
-  parser: '@babel/eslint-parser',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,

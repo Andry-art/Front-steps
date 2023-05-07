@@ -6,11 +6,12 @@ interface Props {
   title: string;
   description: string;
   discount: string;
+  onPress: () => void;
 }
 
-const DiscountCard: FC<Props> = ({ img, title, description, discount }) => {
+const DiscountCard: FC<Props> = ({ img, title, description, discount, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View>
         <Image source={img} style={styles.img}></Image>
       </View>
@@ -34,6 +35,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 10,
     padding: 20,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
   img: {
     width: 80,
@@ -57,7 +63,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 15,
-    color: 'red',
+    color: '#f83b31',
     fontWeight: '800',
   },
 });

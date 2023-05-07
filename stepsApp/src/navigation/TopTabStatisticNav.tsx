@@ -8,9 +8,33 @@ const TopTabStatistics = createMaterialTopTabNavigator();
 function StatisticsTabs() {
   return (
     <TopTabStatistics.Navigator>
-      <TopTabStatistics.Screen name="week" component={WeeklyStatistic} />
-      <TopTabStatistics.Screen name="month" component={Monthly} />
-      <TopTabStatistics.Screen name="year" component={Yearly} />
+      <TopTabStatistics.Screen
+        name="week"
+        component={WeeklyStatistic}
+        options={{
+          tabBarActiveTintColor: '#40B4BB',
+          tabBarInactiveTintColor: '#C0C0C0',
+          tabBarIndicatorStyle: { backgroundColor: '#40B4BB' },
+        }}
+      />
+      <TopTabStatistics.Screen
+        name="month"
+        component={Monthly}
+        options={{
+          tabBarActiveTintColor: '#40B4BB',
+          tabBarInactiveTintColor: '#C0C0C0',
+          tabBarIndicatorStyle: { backgroundColor: '#40B4BB' },
+        }}
+      />
+      <TopTabStatistics.Screen
+        name="year"
+        component={Yearly}
+        options={{
+          tabBarActiveTintColor: '#40B4BB',
+          tabBarInactiveTintColor: '#C0C0C0',
+          tabBarIndicatorStyle: { backgroundColor: '#40B4BB' },
+        }}
+      />
     </TopTabStatistics.Navigator>
   );
 }

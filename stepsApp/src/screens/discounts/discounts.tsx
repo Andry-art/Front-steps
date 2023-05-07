@@ -47,7 +47,11 @@ mail: a.novozhilov@skyeng.ru`,
   },
 ];
 
-const Discounts: FC = () => {
+const Discounts: FC = ({ navigation }) => {
+  const onPressDiscount = () => {
+    navigation.navigate('DiscountInfo');
+  };
+
   const renderDiscount = ({ item }) => {
     return (
       <DiscountCard
@@ -55,6 +59,7 @@ const Discounts: FC = () => {
         title={item.title}
         description={item.description}
         discount={item.discount}
+        onPress={onPressDiscount}
       />
     );
   };
@@ -75,6 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: 'white',
   },
 });
 
