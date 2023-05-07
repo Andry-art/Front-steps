@@ -8,12 +8,8 @@ jobs:
      runs-on: ubuntu-latest
 
      steps: 
-        - name: blabla
-          run: actions/checkout@v2
         - name: init-project
-          run: |
-                cd Front-steps/stepsApp
-                yarn init --yes
+          run: yarn init --yes
 
   eslint: 
      runs-on: ubuntu-latest
