@@ -3,7 +3,14 @@ name: check-build
 on: [pull_request]
 
 jobs:
-   eslint: 
+  init: 
+     runs-on: ubuntu-latest
+   
+     steps: 
+        - name: init-project
+          run: yarn init
+
+  eslint: 
      runs-on: ubuntu-latest
    
      steps: 
