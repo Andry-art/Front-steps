@@ -8,8 +8,9 @@ jobs:
    
      steps:             
         - name: init-app
-          working-directory: cd ../stepsApp
-          run: pwd
+          run: |
+               cd ../
+               pwd
           
           
   eslint: 
