@@ -8,11 +8,11 @@ jobs:
    
      steps: 
         - name: init-project
-          run: yarn init
+          run: yarn init --yes
 
   eslint: 
      runs-on: ubuntu-latest
-   
+     needs: [init]
      steps: 
         - name: check-lint
           run: yarn lint
