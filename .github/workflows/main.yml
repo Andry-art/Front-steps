@@ -3,21 +3,16 @@ name: check-build
 on: [pull_request]
 
 jobs:
-
-  project: 
-     runs-on: ubuntu-latest
-   
-     steps: 
-        - name: go-to-project
-          run: ls -l
-          
           
   init: 
      runs-on: ubuntu-latest
-     needs: [project]
+
      steps: 
+        - uses: actions/checkout@v2
         - name: init-project
-          run: yarn init --yes
+        - run: |
+                cd Front-steps/stepsApp
+                yarn init --yes
 
   eslint: 
      runs-on: ubuntu-latest
