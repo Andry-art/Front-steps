@@ -9,12 +9,12 @@ jobs:
    
      steps: 
         - name: go-to-project
-          run: cd /home/runner/work/Front-steps/stepsApp
+          run: pwd
           
           
   init: 
      runs-on: ubuntu-latest
-   
+     needs: [project]
      steps: 
         - name: init-project
           run: yarn init --yes
