@@ -12,11 +12,6 @@ jobs:
                git clone https://github.com/Andry-art/Front-steps.git
                cd Front-steps/stepsApp
                yarn init --yes
+               yarn lint
           
           
-  eslint: 
-        runs-on: ubuntu-latest
-        needs: [ init ]
-        steps: 
-           - name: check-eslint
-             run: yarn lint
