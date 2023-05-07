@@ -9,7 +9,8 @@ jobs:
      steps:             
         - name: init-app
           run: |
-               cd ../stepsAPP
+               cd ../
+               cd /stepsApp
                pwd
           
           
