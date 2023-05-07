@@ -10,7 +10,7 @@ jobs:
         - name: init-app
           run: |
                git clone https://github.com/Andry-art/Front-steps.git
-               rwd
+               cd stepsApp
           
           
   eslint: 
