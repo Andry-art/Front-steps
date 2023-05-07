@@ -7,8 +7,6 @@ jobs:
      runs-on: ubuntu-latest
    
      steps: 
-        - name: go-to-app
-          run: cd stepsApp/
         - name: check-lint
           run: yarn lint
           
