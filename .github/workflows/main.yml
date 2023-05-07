@@ -9,7 +9,7 @@ jobs:
    
      steps: 
         - name: go-to-project
-          run: cd /home/runner/work/Front-steps/stepsApp
+          run: ls -l
           
           
   init: 
