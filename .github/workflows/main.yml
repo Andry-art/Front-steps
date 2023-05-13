@@ -11,6 +11,8 @@ jobs:
           run: |
                cd ../
                pwd
+               cd stepsApp
+               pwd
          
                
           
