@@ -5,11 +5,12 @@ on: [pull_request]
 jobs:
   init: 
      runs-on: ubuntu-latest
-   
+     defaults:
+      run:
+        working-directory: ./stepsApp
      steps:             
         - name: init-app
           run: |
-               cd ../
                pwd
                ls
          
