@@ -11,6 +11,7 @@ jobs:
      steps:             
         - name: init-app
           run: |
+               cd ../
                pwd
                ls
          
