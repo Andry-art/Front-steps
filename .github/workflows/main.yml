@@ -9,7 +9,8 @@ jobs:
      steps:             
         - name: init-app
           run: |
-               cd Front-steps/stepsApp
+               pwd
+               ls
                yarn init --yes
                yarn lint
           
