@@ -9,9 +9,8 @@ jobs:
      steps:             
         - name: init-app
           run: |
-               pwd
                ls
-               yarn init --yes
-               yarn lint
+         
+               
           
           
