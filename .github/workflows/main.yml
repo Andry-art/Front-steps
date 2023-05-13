@@ -5,13 +5,11 @@ on: [pull_request]
 jobs:
   init: 
      runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: stepsApp
+     
      steps:             
         - name: init-app
           run: |
-               cd ../
+               git clone https://github.com/Andry-art/Front-steps.git
                pwd
                ls
          
