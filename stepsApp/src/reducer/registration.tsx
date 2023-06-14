@@ -1,5 +1,9 @@
-import {createReducer, PayloadAction} from '@reduxjs/toolkit';
-import { logOutActionSuccess, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
+import {
+  logOutActionSuccess,
+  userLogInFailed,
+  userLogInSuccess,
+} from '../action/registrationAction';
 
 interface IRegistration {
   isLogIn: boolean;
@@ -20,7 +24,7 @@ const registration = createReducer<IRegistration>(initialState, builder => {
       state.error = '';
       return state;
     })
-    .addCase('USER_SIGN_UP', state => ({...state, isLoading: true}))
+    .addCase('USER_SIGN_UP', state => ({ ...state, isLoading: true }))
     .addCase(userLogInSuccess, state => {
       state.isLogIn = true;
       state.isLoading = false;

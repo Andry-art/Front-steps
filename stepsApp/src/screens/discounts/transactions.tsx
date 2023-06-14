@@ -3,13 +3,14 @@ import { FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import Transaction from '../../components/Transaction';
 import { transactionsSelector } from '../../selectors/userDataSelector';
+import { COLORS } from '../../constants/colors';
 
 const keyExtractor = (item: any, ind: any) => ind;
 
 const Transactions: FC = () => {
   const allTransactions = useSelector(transactionsSelector);
 
-  const renderDiscount = ({ item }) => {
+  const renderDiscount = ({ item }: any) => {
     return <Transaction date={item.date} tokens={item.tokens} />;
   };
 
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
   },
 });
 

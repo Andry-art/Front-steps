@@ -1,73 +1,55 @@
-import { FC } from 'react';
-import { FlatList, StyleSheet, Text, View, Image } from 'react-native';
-import skyEngImg from '../../../assets/skyEng.png';
+import React, { FC, useEffect } from 'react';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import DiscountCard from '../../components/DiscountCard';
+import { COLORS } from '../../constants/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllDiscountsAction } from '../../action/discountAction';
+import {
+  getAllDiscountSelector,
+  isErrorDiscountSelector,
+  isLoadingDiscountSelector,
+} from '../../selectors/discountsSelectors';
+import LoadingScreen from '../../components/loadingScreen';
 
-const keyExtractor = (item: any) => item.id;
+const keyExtractor = (item: any) => item._id;
 
-const data = [
-  {
-    img: skyEngImg,
-    description: `Обучение в самой большой онлайн-школе английского языка в России по специальным ценам для сотрудников, их родственников и друзей.
-Запись на бесплатный вводный урок:
-https://corp.skyeng.ru/itechartff
-При желании Skyeng может устраивать самые интересные Event- мероприятия, где вы сможете в формате "бизнес игры" прокачать свои навыки в английском языке.
-По всем вопросам Вы можете смело обращаться к Александру Новожилову
-tel: +7 (985) 741-13-11
-mail: a.novozhilov@skyeng.ru`,
-    title: 'SkyEng',
-    discount: 50,
-    id: '1',
-  },
-  {
-    img: skyEngImg,
-    description: `Обучение в самой большой онлайн-школе английского языка в России по специальным ценам для сотрудников, их родственников и друзей.
-Запись на бесплатный вводный урок:
-https://corp.skyeng.ru/itechartff
-При желании Skyeng может устраивать самые интересные Event- мероприятия, где вы сможете в формате "бизнес игры" прокачать свои навыки в английском языке.
-По всем вопросам Вы можете смело обращаться к Александру Новожилову
-tel: +7 (985) 741-13-11
-mail: a.novozhilov@skyeng.ru`,
-    title: 'SkyEng',
-    discount: 50,
-    id: '2',
-  },
-  {
-    img: skyEngImg,
-    description: `Обучение в самой большой онлайн-школе английского языка в России по специальным ценам для сотрудников, их родственников и друзей.
-Запись на бесплатный вводный урок:
-https://corp.skyeng.ru/itechartff
-При желании Skyeng может устраивать самые интересные Event- мероприятия, где вы сможете в формате "бизнес игры" прокачать свои навыки в английском языке.
-По всем вопросам Вы можете смело обращаться к Александру Новожилову
-tel: +7 (985) 741-13-11
-mail: a.novozhilov@skyeng.ru`,
-    title: 'SkyEng',
-    discount: 50,
-    id: '3',
-  },
-];
+const Discounts: FC = ({ navigation }: any) => {
+  const dispatch = useDispatch();
+  const allDiscounts = useSelector(getAllDiscountSelector);
+  const isLoading = useSelector(isLoadingDiscountSelector);
+  const error = useSelector(isErrorDiscountSelector);
 
-const Discounts: FC = ({ navigation }) => {
-  const onPressDiscount = () => {
-    navigation.navigate('DiscountInfo');
+  useEffect(() => {
+    dispatch(getAllDiscountsAction());
+  }, [dispatch]);
+
+  const onPressDiscount = (title: string, item: any) => {
+    navigation.navigate('DiscountInfo', { title, discountProps: item });
   };
 
-  const renderDiscount = ({ item }) => {
+  const renderDiscount = ({ item }: any) => {
     return (
       <DiscountCard
         img={item.img}
         title={item.title}
-        description={item.description}
+        description={item.rules}
         discount={item.discount}
-        onPress={onPressDiscount}
+        onPress={() => onPressDiscount(item.title, item)}
       />
     );
   };
 
+  if (error) {
+    Alert.alert(error);
+  }
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       <FlatList
-        data={data}
+        data={allDiscounts}
         renderItem={item => renderDiscount(item)}
         keyExtractor={keyExtractor}
         style={styles.container}
@@ -80,7 +62,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
   },
 });
 

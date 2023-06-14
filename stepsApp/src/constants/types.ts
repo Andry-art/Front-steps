@@ -8,7 +8,6 @@ export type TabNavigation = {
   Statistic: undefined;
 };
 
-
 export type textType =
   | 'none'
   | 'URL'
@@ -40,33 +39,42 @@ export type textType =
   | 'oneTimeCode'
   | undefined;
 
-  export interface IUserDataResponse {
-    "userId": string,
-    "date": string,
-    "steps": number,
-    "tokens": number,
-    "_id": string,
-    "__v": number
-  }
+export interface IUserDataResponse {
+  userId: string;
+  date: string;
+  steps: number;
+  tokens: number;
+  _id: string;
+  __v: number;
+}
 
-  export interface IDailyData {
-    userId?: string | null, 
-    date?: string | number, 
-    steps?: number, 
-    tokens?: number,
-    distance?: number 
-  }
+export interface IDailyData {
+  userId?: string | null;
+  date?: string | number;
+  steps?: number;
+  tokens?: number;
+  distance?: number;
+}
 
-  export interface IUserData {
-    data: Array<IUserDataResponse>;
-    dailyData: IDailyData,
-    isLoading: boolean;
-    error: string;
-  }
+export interface IUserData {
+  data: Array<IUserDataResponse>;
+  dailyData: IDailyData;
+  isLoading: boolean;
+  error: string;
+}
 
-  export interface IStatisticType {
-    date: string;
-    steps: number;
-    fullDate: string;
-    tokens: number;
-  }
+export interface IStatisticType {
+  date: string;
+  steps: number;
+  fullDate: string;
+  tokens: number;
+}
+
+export interface IDiscountData {
+  id: string;
+  cost: number;
+  discount: number;
+  img: string;
+  rules: string;
+  title: string;
+}

@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../constants/colors';
 
 interface Props {
   img: any;
@@ -13,7 +14,7 @@ const DiscountCard: FC<Props> = ({ img, title, description, discount, onPress })
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View>
-        <Image source={img} style={styles.img}></Image>
+        <Image source={{ uri: img }} style={styles.img} />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
@@ -29,13 +30,13 @@ const DiscountCard: FC<Props> = ({ img, title, description, discount, onPress })
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     height: 120,
     width: '100%',
     marginBottom: 20,
     borderRadius: 10,
     padding: 20,
-    shadowColor: 'black',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 15,
-    color: '#f83b31',
+    color: COLORS.red,
     fontWeight: '800',
   },
 });

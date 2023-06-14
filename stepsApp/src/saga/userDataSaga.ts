@@ -29,7 +29,6 @@ export function* getUserData(action: ReturnType<typeof getUserDataAction>): Gene
 
 export function* postUserData(action: ReturnType<typeof sendUserData>): Generator {
   try {
-    console.log(action.payload, 'payloadDaily');
     const response = (yield call(
       Api.authPost.bind(Api),
       `https://steps-app.cyclic.app/data/newstepitem`,
