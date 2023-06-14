@@ -1,12 +1,15 @@
-import {call, put, takeEvery} from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { logOutActionSuccess, userLogIn, userLogInFailed, userLogInSuccess } from '../action/registrationAction';
+import {
+  logOutActionSuccess,
+  userLogIn,
+  userLogInFailed,
+  userLogInSuccess,
+} from '../action/registrationAction';
 import { Api } from '../constants/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export function* userSendLogIn(
-  action: ReturnType<typeof userLogIn>,
-): Generator {
+export function* userSendLogIn(action: ReturnType<typeof userLogIn>): Generator {
   try {
     const response = (yield call(
       Api.auth.bind(Api),
@@ -17,7 +20,7 @@ export function* userSendLogIn(
     // console.log(typeof response.user.id, 'login')
 
     if (response) {
-      yield AsyncStorage.setItem('user_id', response.user.id)
+      yield AsyncStorage.setItem('user_id', response.user.id);
       yield put(userLogInSuccess());
     }
 
@@ -29,9 +32,7 @@ export function* userSendLogIn(
   }
 }
 
-export function* userSendSignUp(
-  action: ReturnType<typeof userLogIn>,
-): Generator {
+export function* userSendSignUp(action: ReturnType<typeof userLogIn>): Generator {
   try {
     const response = (yield call(
       Api.auth.bind(Api),
@@ -42,7 +43,7 @@ export function* userSendSignUp(
     // console.log(response, 'signUp')
 
     if (response) {
-      yield AsyncStorage.setItem('user_id', response.user.id)
+      yield AsyncStorage.setItem('user_id', response.user.id);
       yield put(userLogInSuccess());
     }
     if (!response) {
@@ -55,11 +56,8 @@ export function* userSendSignUp(
 
 export function* userLogOut(): Generator {
   try {
-    const response = (yield call(
-      Api.authPost.bind(Api),
-      `https://steps-app.cyclic.app/auth/logout`,
-    )) as Response;
-    yield AsyncStorage.removeItem('user_id')
+    (yield call(Api.authPost.bind(Api), `https://steps-app.cyclic.app/auth/logout`)) as Response;
+    yield AsyncStorage.removeItem('user_id');
     yield EncryptedStorage.clear();
     yield put(logOutActionSuccess());
   } catch (error) {

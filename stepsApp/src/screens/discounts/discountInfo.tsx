@@ -1,11 +1,13 @@
-import { FC } from 'react';
-import { FlatList, StyleSheet, View, Text } from 'react-native';
+import React, { FC } from 'react';
+import { FlatList, StyleSheet, View, Text, ScrollView, Image } from 'react-native';
+import { COLORS } from '../../constants/colors';
 
-const DiscountInfo: FC = () => {
+const DiscountInfo: FC = ({ navigation }) => {
+  console.log(navigation.getState().routes[1].params, 'vvvv');
   return (
-    <View>
-      <Text>Discount Info</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <View>{/* <Image source={{ uri: img }} style={styles.img} /> */}</View>
+    </ScrollView>
   );
 };
 
@@ -13,7 +15,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
+  },
+  img: {
+    width: '100%',
+    height: 100,
   },
 });
 
