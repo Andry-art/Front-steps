@@ -1,5 +1,5 @@
 import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pedometer from '@t2tx/react-native-universal-pedometer';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
@@ -25,6 +25,7 @@ import Animated, {
   withDelay,
   interpolateColor,
 } from 'react-native-reanimated';
+import { COLORS } from '../../constants/colors';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     getStep();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dayIsOff = () => {
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#FFF',
+    backgroundColor: COLORS.white,
   },
   tokenContainer: {
     flex: 1,
@@ -225,11 +227,11 @@ const styles = StyleSheet.create({
   tokenCircle: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: COLORS.white,
     borderRadius: 100,
     width: 200,
     height: 200,
-    shadowColor: 'black',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 7 },
     shadowOpacity: 0.2,
     shadowRadius: 9,
@@ -243,11 +245,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   buttonColorStart: {
-    backgroundColor: '#57cc09',
+    backgroundColor: COLORS.green,
     height: 80,
   },
   buttonColorStop: {
-    backgroundColor: '#f83b31',
+    backgroundColor: COLORS.red,
     height: 80,
   },
   buttomContainer: {

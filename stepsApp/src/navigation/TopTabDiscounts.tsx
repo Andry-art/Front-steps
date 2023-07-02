@@ -1,3 +1,4 @@
+import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Discounts from '../screens/discounts/discounts';
 import Transactions from '../screens/discounts/transactions';

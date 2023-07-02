@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { COLORS } from '../constants/colors';
 
 interface Props {
   title: string;
@@ -29,12 +30,12 @@ const Button: FC<Props> = ({ title, onPress, isSecondary, disabled, style, isMai
 const styles = StyleSheet.create({
   button: {
     height: 50,
-    backgroundColor: 'gray',
+    backgroundColor: COLORS.gray,
     borderRadius: 10,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: 'black',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -43,22 +44,22 @@ const styles = StyleSheet.create({
   buttonSecondary: {
     height: 50,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: COLORS.gray,
     borderRadius: 10,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    color: 'white',
+    color: COLORS.white,
   },
   textSecondary: {
-    color: 'black',
+    color: COLORS.black,
   },
   main: {
     fontSize: 25,
     fontWeight: '700',
-    color: 'white',
+    color: COLORS.white,
   },
 });
 
