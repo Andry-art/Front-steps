@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import React, { FC, useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, useWindowDimensions, View, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, useWindowDimensions, View, Text, LogBox } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { getUserDataAction } from '../../action/userDataAction';
@@ -12,6 +12,8 @@ import {
   weeklyStatisticsSelector,
 } from '../../selectors/userDataSelector';
 import InfoModal from './infoModal';
+import { COLORS } from '../../constants/colors';
+LogBox.ignoreAllLogs();
 
 interface Props {
   navigation: BottomTabNavigationProp<TabNavigation>;
@@ -41,14 +43,7 @@ const Weekly: FC<Props> = () => {
 
   if (!weeklyStatistics.data.find(it => it.steps > 0)) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'white',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.emptyChartContainer}>
         <Text> No steps for this week</Text>
       </View>
     );
@@ -113,9 +108,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
   },
   chart: {
+    alignItems: 'center',
+  },
+  emptyChartContainer: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

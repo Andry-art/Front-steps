@@ -8,6 +8,11 @@ export type TabNavigation = {
   Statistic: undefined;
 };
 
+export type TopTabDiscounts = {
+  Main: undefined;
+  Statistic: undefined;
+};
+
 export type textType =
   | 'none'
   | 'URL'
