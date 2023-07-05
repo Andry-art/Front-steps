@@ -1,0 +1,39 @@
+{
+  "main": {
+    "title": "Главная",
+    "token_title": "SP за шаги",
+    "stop": "стоп",
+    "start": "старт",
+    "steps": "Шаги",
+    "time": "Время",
+    "km": "КМ"
+  },
+  "discounts": {
+    "title": "Скидки",
+    "transaction": "Транзакции"
+  },
+  "statistic": {
+    "title": "Статистика",
+    "month_info": "Месяц:",
+    "date": "Дата:",
+    "steps": "Шаги:",
+    "tokens": "Токены:",
+    "total_steps": "Общее кол-во шагов:",
+    "total_tokens": "Общее кол-во токенов:",
+    "week": "неделя",
+    "month": "месяц",
+    "year": "год"
+  },
+  "info": {
+    "no_steps_month": "Нет шагов за этот месяц",
+    "no_steps_week": "Нет шагов за эту неделю",
+    "no_steps_year": "Нет шагов за этот год"
+  },
+  "modal": {
+    "language": "Язык",
+    "log_out": "Выйти",
+    "close": "Закрыть",
+    "english": "Английский",
+    "russian": "Русский"
+  }
+}

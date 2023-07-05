@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { SafeAreaView, StyleSheet, useWindowDimensions, View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
@@ -9,12 +9,15 @@ import {
   monthlyStatisticsSelector,
 } from '../../selectors/userDataSelector';
 import InfoModal from './infoModal';
+import { COLORS } from '../../constants/colors';
+import { useTranslation } from 'react-i18next';
 
 const Monthly: FC = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
   const monthlyStatistics = useSelector(monthlyStatisticsSelector);
   const { width: screenWidth } = useWindowDimensions();
   const [dailyData, setDailyData] = useState<IStatisticType>();
+  const { t } = useTranslation();
 
   const showInfo = useCallback((data: IStatisticType) => {
     setDailyData(data);
@@ -22,15 +25,8 @@ const Monthly: FC = () => {
 
   if (!monthlyStatistics.data.find(it => it.steps > 0)) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'white',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text> No steps for this month</Text>
+      <View style={styles.emptyContainer}>
+        <Text>{t('info.no_steps_month')}</Text>
       </View>
     );
   }
@@ -94,7 +90,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chart: {
     alignItems: 'center',
