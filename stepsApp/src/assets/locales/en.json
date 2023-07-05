@@ -1,0 +1,39 @@
+{
+  "main": {
+    "title": "Main",
+    "token_title": "SP per walk",
+    "stop": "stop",
+    "start": "start",
+    "steps": "Steps",
+    "time": "Time",
+    "km": "KM"
+  },
+  "discounts": {
+    "title": "Discounts",
+    "transaction": "Transaction"
+  },
+  "statistic": {
+    "title": "Statistic",
+    "month_info": "Month:",
+    "date": "Date:",
+    "steps": "Steps:",
+    "tokens": "Tokens:",
+    "total_steps": "Total steps:",
+    "total_tokens": "Total tokens:",
+    "week": "week",
+    "month": "month",
+    "year": "year"
+  },
+  "info": {
+    "no_steps_month": "No steps for this month",
+    "no_steps_week": "No steps for this week",
+    "no_steps_year": "No steps for this year"
+  },
+  "modal": {
+    "language": "Language",
+    "log_out": "Log out",
+    "close": "Close",
+    "english": "English",
+    "russian": "Russian"
+  }
+}

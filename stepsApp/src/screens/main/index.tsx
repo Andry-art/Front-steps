@@ -26,6 +26,7 @@ import Animated, {
   interpolateColor,
 } from 'react-native-reanimated';
 import { COLORS } from '../../constants/colors';
+import { useTranslation } from 'react-i18next';
 
 const MainScreen = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const MainScreen = () => {
   const { isConnected } = useNetInfo();
   const dailyData = useSelector(dailyDataSelector);
   const animatedValue = useSharedValue(0);
+  const { t } = useTranslation();
 
   const todayData = new Date();
 
@@ -193,7 +195,7 @@ const MainScreen = () => {
             <Animated.View style={[styles.firstBackgroundCircle, firstCircleAnimate]}>
               <View style={styles.tokenCircle}>
                 <Text style={styles.tokenInfo}>{dailyData.tokens}</Text>
-                <Text style={styles.tokenTitle}>SP per walk</Text>
+                <Text style={styles.tokenTitle}>{t('main.token_title')}</Text>
               </View>
             </Animated.View>
           </Animated.View>
@@ -202,7 +204,7 @@ const MainScreen = () => {
       <View style={styles.buttomContainer}>
         <CommonInfo steps={dailyData?.steps} distance={dailyData?.distance} time={time} />
         <Button
-          title={isStart ? 'stop' : 'start'}
+          title={isStart ? t('main.stop') : t('main.start')}
           onPress={onPressButton}
           isMain
           style={isStart ? styles.buttonColorStop : styles.buttonColorStart}

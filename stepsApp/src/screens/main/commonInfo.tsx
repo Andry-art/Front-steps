@@ -1,6 +1,7 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import { FC, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '../../constants/colors';
 
 interface Props {
   steps?: number;
@@ -9,18 +10,19 @@ interface Props {
 }
 
 const CommonInfo: FC<Props> = ({ steps, time, distance }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.infoContainer}>
       <View style={styles.infoItem}>
-        <Text style={styles.infoTitle}>Steps</Text>
+        <Text style={styles.infoTitle}>{t('main.steps')}</Text>
         <Text style={styles.info}>{steps?.toLocaleString()}</Text>
       </View>
       <View style={styles.infoItem}>
-        <Text style={styles.infoTitle}>Time</Text>
+        <Text style={styles.infoTitle}>{t('main.time')}</Text>
         <Text style={styles.info}>{time}</Text>
       </View>
       <View style={styles.infoItem}>
-        <Text style={styles.infoTitle}>KM</Text>
+        <Text style={styles.infoTitle}>{t('main.km')}</Text>
         <Text style={styles.info}>{distance?.toLocaleString()}</Text>
       </View>
     </View>
@@ -34,12 +36,12 @@ const styles = StyleSheet.create({
   },
   infoItem: {
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: COLORS.white,
     paddingVertical: 30,
     width: '30%',
     borderRadius: 8,
     marginBottom: 40,
-    shadowColor: 'black',
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

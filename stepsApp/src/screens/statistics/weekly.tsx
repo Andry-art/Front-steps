@@ -13,6 +13,7 @@ import {
 } from '../../selectors/userDataSelector';
 import InfoModal from './infoModal';
 import { COLORS } from '../../constants/colors';
+import { useTranslation } from 'react-i18next';
 LogBox.ignoreAllLogs();
 
 interface Props {
@@ -23,6 +24,7 @@ const Weekly: FC<Props> = () => {
   const isLoading = useSelector(userHistoryLoadingSelector);
   const weeklyStatistics = useSelector(weeklyStatisticsSelector);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { width: screenWidth } = useWindowDimensions();
   const [dailyData, setDailyData] = useState<IStatisticType>();
 
@@ -44,7 +46,7 @@ const Weekly: FC<Props> = () => {
   if (!weeklyStatistics.data.find(it => it.steps > 0)) {
     return (
       <View style={styles.emptyChartContainer}>
-        <Text> No steps for this week</Text>
+        <Text>{t('info.no_steps_week')}</Text>
       </View>
     );
   }
